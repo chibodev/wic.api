@@ -1,0 +1,12 @@
+{% extends "Recipe/layout.html.twig" %}
+
+{% block body %}
+
+    <h1><span>Welcome to</span> WIC <small>What I'll Cook</small> </h1>
+
+    <ul>
+        <li><a href="{{ path('recipe') }}">Add a new Recipe</a></li>
+        <li><a href="{{ path('add-recipe') }}">Show current recipes</a></li>
+    </ul>
+
+{% endblock body %}
