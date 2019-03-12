@@ -139,6 +139,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "ramsey/uuid": {
+        "version": "3.8.0"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -218,6 +221,9 @@
             ".env"
         ]
     },
+    "symfony/form": {
+        "version": "v4.2.4"
+    },
     "symfony/framework-bundle": {
         "version": "4.2",
         "recipe": {
@@ -244,6 +250,9 @@
         "version": "v4.2.4"
     },
     "symfony/inflector": {
+        "version": "v4.2.4"
+    },
+    "symfony/intl": {
         "version": "v4.2.4"
     },
     "symfony/maker-bundle": {
@@ -277,6 +286,9 @@
             "tests/.gitignore"
         ]
     },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.10.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
     },
@@ -288,6 +300,9 @@
     },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
+    },
+    "symfony/property-access": {
+        "version": "v4.2.4"
     },
     "symfony/property-info": {
         "version": "v4.2.4"
