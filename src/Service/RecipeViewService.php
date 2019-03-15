@@ -12,7 +12,7 @@ use App\Repository\UnknownRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
-class RecipeViewService
+class RecipeViewService implements RecipeView
 {
     private $recipeRepo;
     private $unknownRepo;
@@ -25,10 +25,6 @@ class RecipeViewService
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @return Recipe|NotFound
-     * @throws Exception
-     */
     public function getRecipeByMealContent(string $mealContent)
     {
         $recipe = $this->recipeRepo->findByMealContent($mealContent);
