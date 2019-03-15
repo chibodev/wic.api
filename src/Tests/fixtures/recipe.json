@@ -1,0 +1,28 @@
+{
+  "name": "chicken",
+  "ingredient": [
+    {
+      "description": "Onion",
+      "quantity": 1,
+      "unit": ""
+    },
+    {
+      "description": "Salt",
+      "quantity": 3,
+      "unit": "table spoon"
+    }
+  ],
+  "preparation": [
+    {
+      "description": "Wash the chicken"
+    },
+    {
+      "description": "Pre heat over at 180 degrees for 10 minutes"
+    }
+  ],
+  "direction": [
+    {
+      "description": "Put the chicken inside the oven"
+    }
+  ]
+}
