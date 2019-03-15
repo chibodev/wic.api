@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,37 +16,30 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
+    /**
+     * @throws LogicException
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Recipe::class);
     }
 
-    // /**
-    //  * @return Recipe[] Returns an array of Recipe objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Recipe[]|null
+     */
+    public function findByMealContent(string $mealContent): ?array
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->_em->createQueryBuilder('recipe');
 
-    /*
-    public function findOneBySomeField($value): ?Recipe
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $queryBuilder
+            ->join(Ingredient::class, 'ingredient')
+            ->where($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->like('recipe.name', ':mealContent'),
+                $queryBuilder->expr()->like('ingredient.description', ':mealContent')
+            ))
+            ->setParameter('mealContent', $mealContent)
         ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
-    */
 }
