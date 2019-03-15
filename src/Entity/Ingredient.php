@@ -29,13 +29,13 @@ class Ingredient
 
     /**
      * @var string|null
-     * @ORM\Column(type="string", length=10, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $unit;
 
     /**
      * @var Recipe
-     * @ORM\OneToOne(targetEntity="App\Entity\Recipe", inversedBy="ingredient")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="ingredient")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;

@@ -23,8 +23,8 @@ class Direction
 
     /**
      * @var Recipe
-     * @ORM\OneToOne(targetEntity="App\Entity\Recipe")
-     * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Recipe", inversedBy="direction")
+     * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
 
