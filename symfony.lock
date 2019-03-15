@@ -87,6 +87,18 @@
     "facebook/webdriver": {
         "version": "1.6.0"
     },
+    "friendsofsymfony/rest-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
+        },
+        "files": [
+            "config/packages/fos_rest.yaml"
+        ]
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -322,7 +334,16 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/security-core": {
+        "version": "v4.2.4"
+    },
+    "symfony/serializer": {
+        "version": "v4.2.4"
+    },
     "symfony/stopwatch": {
+        "version": "v4.2.4"
+    },
+    "symfony/templating": {
         "version": "v4.2.4"
     },
     "symfony/test-pack": {
@@ -382,6 +403,12 @@
     },
     "webmozart/assert": {
         "version": "1.4.0"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
