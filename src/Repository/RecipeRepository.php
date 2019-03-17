@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -12,7 +13,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Recipe|null find($id, $lockMode = null, $lockVersion = null)
  * @method Recipe|null findOneBy(array $criteria, array $orderBy = null)
  * @method Recipe[]    findAll()
- * @method Recipe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Recipe[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RecipeRepository extends ServiceEntityRepository
 {
@@ -29,16 +30,21 @@ class RecipeRepository extends ServiceEntityRepository
      */
     public function findByMealContent(string $mealContent): ?array
     {
-        $queryBuilder = $this->_em->createQueryBuilder('recipe');
+        $queryBuilder = $this->_em->createQueryBuilder();
+
+        var_dump($mealContent);
 
         $queryBuilder
-            ->join(Ingredient::class, 'ingredient')
-            ->where($queryBuilder->expr()->orX(
-                $queryBuilder->expr()->like('recipe.name', ':mealContent'),
-                $queryBuilder->expr()->like('ingredient.description', ':mealContent')
-            ))
+            ->select('recipe')
+            ->from(Recipe::class, 'recipe')
+            ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
+            ->where('REGEXP(recipe.name, :mealContent) = true')
+            ->orWhere('REGEXP(ingredient.description, :mealContent) = true')
             ->setParameter('mealContent', $mealContent)
+            ->distinct()
         ;
+
+        var_dump($queryBuilder->getQuery()->getSQL());
 
         return $queryBuilder->getQuery()->getResult();
     }
