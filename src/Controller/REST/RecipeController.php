@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Controller\REST;
 
 use App\DTO\Request\MealContent;
+use App\DTO\Response\RecipeShort;
 use App\DTO\Response\Recipe;
 use App\Service\RecipeView;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -42,41 +44,62 @@ class RecipeController extends AbstractFOSRestController
 
     /**
      * @Route(path="/get/recipe/{uuid}", methods={"GET"})
-     */
-    public function recipeAction(string $uuid): Response
-    {
-        //TODO: call service to takes care of retrieving data based on its uuid
-        return $this->handleView(View::create(null, Response::HTTP_OK));
-    }
-
-    /**
-     * @Route(path="/get/recipe", methods={"GET"})
      *
      * @SWG\Response(
      *     response=200,
-     *     description="The endpoint for successful save",
+     *     description="The endpoint for getting recipes off a specific search term",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=Recipe::class)
+     *     )
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="uuid",
+     *     in="path",
+     *     type="string",
+     *     description="The recipe uuid",
+     *     default="f88808ca-310d-40d8-8042-2628af9fbf06"
+     * )
+     *
+     * @throws Exception
+     */
+    public function getRecipeAction(string $uuid): Response
+    {
+        $recipe = $this->recipeView->getRecipeByUuid($uuid);
+
+        return $this->handleView(View::create($recipe, Response::HTTP_OK));
+    }
+
+    /**
+     * @Route(path="/get/recipe", methods={"POST"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="The endpoint for getting recipes off a specific search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=RecipeShort::class)
      *     )
      * )
      * @SWG\Parameter(
      *     name="body",
      *     in="body",
      *     type="json",
-     *     description="The Sme parameters",
+     *     description="The search term parameter(s)",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=MealContent::class)
      *     )
      * )
      * @ParamConverter("content", converter="fos_rest.request_body")
+     * @throws Exception
      */
     public function recipeSearchAction(MealContent $content): Response
     {
-        //TODO: call service to takes care of retrieving data based on its uuid
+        $recipe = $this->recipeView->getRecipeByMealContent($content->getContent());
 
-        return $this->handleView(View::create($this->recipeView->getRecipeByMealContent($content->getContent()), Response::HTTP_OK));
+        return $this->handleView(View::create($recipe), Response::HTTP_OK);
     }
 
 }
