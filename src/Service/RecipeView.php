@@ -6,13 +6,19 @@ namespace App\Service;
 
 use App\DTO\Response\NotFound;
 use App\DTO\Response\Recipe;
+use App\DTO\Response\RecipeShort;
 use Exception;
 
 interface RecipeView
 {
     /**
-     * @return Recipe|NotFound
+     * @return RecipeShort|NotFound
      * @throws Exception
      */
     public function getRecipeByMealContent(string $mealContent);
+
+    /**
+     * @throws Exception
+     */
+    public function getRecipeByUuid(string $uuid): Recipe;
 }
