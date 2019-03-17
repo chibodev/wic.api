@@ -22,6 +22,8 @@ doctrine:
                 date_format: DoctrineExtensions\Query\Mysql\DateFormat
                 now: DoctrineExtensions\Query\Mysql\Now
                 day: DoctrineExtensions\Query\Mysql\Day
+            string_functions:
+                regexp: DoctrineExtensions\Query\Mysql\Regexp
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
