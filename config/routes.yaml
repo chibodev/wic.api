@@ -6,8 +6,3 @@ index:
   path: /
   controller: App\Controller\IndexController::indexAction
   methods: [GET]
-
-recipe:
-  path: /recipe
-  controller: App\Controller\RecipeController::recipeAction
-  methods: [GET]
