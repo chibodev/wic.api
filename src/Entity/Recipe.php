@@ -102,12 +102,12 @@ class Recipe
         return $this->ingredient;
     }
 
-    public function getPrep(): int
+    public function getPrep(): ?int
     {
         return $this->prep;
     }
 
-    public function getCook(): int
+    public function getCook(): ?int
     {
         return $this->cook;
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Response;
 
-class Recipe
+class RecipeShort
 {
     /** @var string */
     private $name;
@@ -12,18 +12,15 @@ class Recipe
     private $prep;
     /** @var int|null */
     private $cook;
-    /** @var Ingredient[] */
-    private $ingredient;
-    /** @var Direction[] */
-    private $direction;
+    /** @var string */
+    private $uuid;
 
-    public function __construct(string $name, ?int $prepInMinutes, ?int $cookInMinutes, array $ingredient, array $direction)
+    public function __construct(string $uuid, string $name, ?int $prepInMinutes, ?int $cookInMinutes)
     {
         $this->name = $name;
         $this->prep = $prepInMinutes;
         $this->cook = $cookInMinutes;
-        $this->ingredient = $ingredient;
-        $this->direction = $direction;
+        $this->uuid = $uuid;
     }
 
     public function getName(): string
@@ -41,13 +38,8 @@ class Recipe
         return $this->cook;
     }
 
-    public function getIngredient(): array
+    public function getUuid(): string
     {
-        return $this->ingredient;
-    }
-
-    public function getDirection(): array
-    {
-        return $this->direction;
+        return $this->uuid;
     }
 }
