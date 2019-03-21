@@ -8,6 +8,7 @@ use App\DTO\Response\NotFound;
 use App\DTO\Response\Recipe;
 use App\DTO\Response\RecipeShort;
 use App\Entity\Recipe as RecipeEntity;
+use App\Entity\Unknown;
 use App\Repository\DirectionRepository;
 use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
@@ -20,6 +21,13 @@ class RecipeViewService implements RecipeView
     private $unknownRepo;
     private $ingredientRepo;
     private $directionRepo;
+
+    private const AND = ' and ';
+    private const IS = ' is ';
+    private const EXCLUDE_CHAR = [
+        self::AND,
+        self::IS
+    ];
 
     public function __construct(
         RecipeRepository $recipeRepo,
@@ -38,7 +46,7 @@ class RecipeViewService implements RecipeView
         $recipes = $this->recipeRepo->findByMealContent($this->formatString($mealContent));
 
         if(!$recipes){
-            /*
+
             $unknown = $this->unknownRepo->findOneBy(['term' => $mealContent]);
             if($unknown) {
                 $unknown->updateCounter();
@@ -47,7 +55,7 @@ class RecipeViewService implements RecipeView
                 $unknown = new Unknown($mealContent);
             }
             $this->unknownRepo->save($unknown);
-            */
+
             return new NotFound(sprintf('Unfortunately there is no available recipe associated with %s at this point in time.', $mealContent));
         }
 
@@ -75,10 +83,12 @@ class RecipeViewService implements RecipeView
         return new Recipe($recipe->getName(), $recipe->getPrep(), $recipe->getCook(), $ingredient, $direction);
     }
 
-    private function formatString(string $toBeFormatted): string
+    private function formatString(string $toBeFormatted): array
     {
-        //TODO: review regular expression
-        $toBeFormatted = preg_replace('/\s+/', ' ', $toBeFormatted);
-        return str_replace(' ', '|^', $toBeFormatted);
+
+        $toBeFormatted = strtolower(preg_replace('/[^A-Za-z]\s+/', ' ', $toBeFormatted));    //remove special char + multiple whitespaces
+        $toBeFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
+
+        return str_word_count($toBeFormatted, 1);
     }
 }
