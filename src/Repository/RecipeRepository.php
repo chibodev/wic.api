@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Ingredient;
 use App\Entity\Recipe;
+use App\Service\LikeQueryHelpers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use LogicException;
@@ -17,6 +18,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
+    use LikeQueryHelpers;
+
     /**
      * @throws LogicException
      */
@@ -26,25 +29,22 @@ class RecipeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Recipe[]|null
+     * @return Recipe[]
      */
-    public function findByMealContent(string $mealContent): ?array
+    public function findByMealContent(array $mealContents): ?array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
-
-        var_dump($mealContent);
 
         $queryBuilder
             ->select('recipe')
             ->from(Recipe::class, 'recipe')
             ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
-            ->where('REGEXP(recipe.name, :mealContent) = true')
-            ->orWhere('REGEXP(ingredient.description, :mealContent) = true')
-            ->setParameter('mealContent', $mealContent)
-            ->distinct()
         ;
 
-        var_dump($queryBuilder->getQuery()->getSQL());
+        foreach ($mealContents as $index => $mealContent) {
+            $queryBuilder->orWhere("recipe.name LIKE :mealContent$index ESCAPE '!'");
+            $queryBuilder->setParameter("mealContent$index", $this->makeLikeParam($mealContent));
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
