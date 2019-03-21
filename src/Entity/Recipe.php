@@ -9,6 +9,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RecipeRepository")
+ * @ORM\Table(indexes={@ORM\Index(name="name_idx", columns={"name"})})
  */
 class Recipe
 {
@@ -63,9 +64,15 @@ class Recipe
     private $direction;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $source;
+
+    /**
      * @throws Exception
      */
-    public function __construct(string $name, ?int $prep, ?int $cook, ?Ingredient $ingredient, ?Direction $direction)
+    public function __construct(string $name, ?int $prep, ?int $cook, ?Ingredient $ingredient, ?Direction $direction, ?string $source)
     {
         $this->name = $name;
         $this->ingredient = $ingredient;
@@ -75,6 +82,7 @@ class Recipe
         $this->prep = $prep;
         $this->cook = $cook;
         $this->direction = $direction;
+        $this->source = $source;
     }
 
     public function getId(): ?int
@@ -135,5 +143,15 @@ class Recipe
     public function setDirection(?Direction $direction): void
     {
         $this->direction = $direction;
+    }
+
+    public function getSource(): string
+    {
+        return $this->source;
+    }
+
+    public function setSource(string $source): void
+    {
+        $this->source = $source;
     }
 }
