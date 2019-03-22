@@ -1,0 +1,38 @@
+{% extends "Recipe/layout.html.twig" %}
+
+{% block body %}
+
+    <h1>Recipe based on known recipe name or available ingredient</h1>
+    {{ form(searchForm) }}
+
+    {% if (data.status == 'yellow') %}
+        <h5> {{ data.message }} </h5>
+    {% endif %}
+
+    {% if (data.status == 'green') %}
+
+        {% set counter = 1 %}
+
+        <h4>Recipe(s)</h4>
+        <table border="1">
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Prep</th>
+                <th>Cook</th>
+            </tr>
+            {% for recipe in data.recipes %}
+                <tr>
+                    <td>{{ counter }}</td>
+                    <td>{{ recipe.uuid|e }}</td>
+                    <td>{{ recipe.name|e }}</td>
+                    <td>{{ recipe.prep|e }}</td>
+                    <td>{{ recipe.cook|e }}</td>
+                </tr>
+                {% set counter = counter + 1 %}
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock body %}
