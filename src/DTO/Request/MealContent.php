@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace App\DTO\Request;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class MealContent
 {
-    /** @var string */
-    private $content;
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     */
+    private $mealContent;
 
-    public function __construct(string $content)
+    public function getMealContent(): ?string
     {
-        $this->content = $content;
+        return $this->mealContent;
     }
 
-    public function getContent(): string
+    public function setMealContent(string $content): void
     {
-        return $this->content;
+        $this->mealContent = $content;
     }
 }
