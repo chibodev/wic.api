@@ -56,7 +56,7 @@ class RecipeViewService implements RecipeView
             }
             $this->unknownRepo->save($unknown);
 
-            return new NotFound(sprintf('Unfortunately there is no available recipe associated with %s at this point in time.', $mealContent));
+            return new NotFound(sprintf('Unfortunately there is no available recipe/ingredient associated with "%s" at this point in time.', $mealContent));
         }
 
         $recipeDto = [];
