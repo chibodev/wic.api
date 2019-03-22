@@ -97,7 +97,7 @@ class RecipeController extends AbstractFOSRestController
      */
     public function recipeSearchAction(MealContent $content): Response
     {
-        $recipe = $this->recipeView->getRecipeByMealContent($content->getContent());
+        $recipe = $this->recipeView->getRecipeByMealContent($content->getMealContent());
 
         return $this->handleView(View::create($recipe), Response::HTTP_OK);
     }
