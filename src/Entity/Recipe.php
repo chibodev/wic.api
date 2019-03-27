@@ -77,6 +77,18 @@ class Recipe
     private $type;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $imageLink;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $imageSource;
+
+    /**
      * @throws Exception
      */
     public function __construct(
@@ -86,7 +98,9 @@ class Recipe
         ?Ingredient $ingredient,
         ?Direction $direction,
         ?string $author,
-        RecipeType $type) {
+        RecipeType $type,
+        string $imageLink,
+        string $imageSource) {
         $this->name = $name;
         $this->ingredient = $ingredient;
         $uuid = Uuid::uuid4();
@@ -97,6 +111,8 @@ class Recipe
         $this->direction = $direction;
         $this->author = $author;
         $this->type = $type;
+        $this->imageLink = $imageLink;
+        $this->imageSource = $imageSource;
     }
 
     public function getId(): ?int
@@ -172,5 +188,25 @@ class Recipe
     public function getType(): RecipeType
     {
         return $this->type;
+    }
+
+    public function setImageLink(string $imageLink): void
+    {
+        $this->imageLink = $imageLink;
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->imageLink;
+    }
+
+    public function setImageSource(string $imageSource): void
+    {
+        $this->imageSource = $imageSource;
+    }
+
+    public function getImageSource(): ?string
+    {
+        return $this->imageSource;
     }
 }
