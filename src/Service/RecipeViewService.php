@@ -14,6 +14,9 @@ use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\UnknownRepository;
 use Exception;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints\Uuid as UuidConstraint;
 
 class RecipeViewService implements RecipeView
 {
@@ -21,6 +24,7 @@ class RecipeViewService implements RecipeView
     private $unknownRepo;
     private $ingredientRepo;
     private $directionRepo;
+    private $logger;
 
     private const AND = ' and ';
     private const IS = ' is ';
@@ -33,12 +37,14 @@ class RecipeViewService implements RecipeView
         RecipeRepository $recipeRepo,
         UnknownRepository $unknownRepo,
         IngredientRepository $ingredientRepo,
-        DirectionRepository $directionRepo
+        DirectionRepository $directionRepo,
+        LoggerInterface $logger
     ) {
         $this->recipeRepo = $recipeRepo;
         $this->unknownRepo = $unknownRepo;
         $this->ingredientRepo = $ingredientRepo;
         $this->directionRepo = $directionRepo;
+        $this->logger = $logger;
     }
 
     public function getRecipeByMealContent(string $mealContent)
@@ -63,32 +69,67 @@ class RecipeViewService implements RecipeView
 
         /** @var RecipeEntity $recipe */
         foreach ($recipes as $recipe){
-            $recipeDto[] = new RecipeShort($recipe->getUuid(), $recipe->getName(), $recipe->getPrep(), $recipe->getCook());
+            $recipeDto[] = new RecipeShort(
+                $recipe->getUuid(),
+                $recipe->getName(),
+                $recipe->getPrep(),
+                $recipe->getCook(),
+                $recipe->getType()
+            );
         }
 
         return $recipeDto;
     }
 
-    public function getRecipeByUuid(string $uuid): Recipe
+    public function getRecipeByUuid(string $uuid)
     {
         $recipe = $this->recipeRepo->findOneBy(['uuid' => $uuid]);
 
+        if (!$this->isUuidValid($uuid)){
+            $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
+            return new NotFound(sprintf('The parameter "%s" is invalid', $uuid));
+        }
+
         if(!$recipe) {
-            throw new Exception(sprintf('No recipe found for the requested uuid %s', $uuid));
+            return new NotFound(sprintf('No recipe associated with the entered id "%s"', $uuid));
         }
 
         $direction = $this->directionRepo->findOneByRecipeForDto($recipe);
         $ingredient = $this->ingredientRepo->findOneByRecipeForDto($recipe);
 
-        return new Recipe($recipe->getName(), $recipe->getPrep(), $recipe->getCook(), $ingredient, $direction);
+        return new Recipe(
+            $recipe->getName(),
+            $recipe->getPrep(),
+            $recipe->getCook(),
+            $ingredient,
+            $direction,
+            $recipe->getType(),
+            $recipe->getAuthor()
+        );
     }
 
     private function formatString(string $toBeFormatted): array
     {
-
         $toBeFormatted = strtolower(preg_replace('/[^A-Za-z]\s+/', ' ', $toBeFormatted));    //remove special char + multiple whitespaces
         $toBeFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
 
         return str_word_count($toBeFormatted, 1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isUuidValid(string $uuid): bool
+    {
+        $validator = Validation::createValidator();
+
+        $uuidContraint = new UuidConstraint();
+
+        $errors = $validator->validate(
+            $uuid,
+            $uuidContraint
+        );
+
+        return count($errors) === 0;
     }
 }

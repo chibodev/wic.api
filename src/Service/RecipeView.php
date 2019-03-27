@@ -18,7 +18,8 @@ interface RecipeView
     public function getRecipeByMealContent(string $mealContent);
 
     /**
+     * @return Recipe|NotFound
      * @throws Exception
      */
-    public function getRecipeByUuid(string $uuid): Recipe;
+    public function getRecipeByUuid(string $uuid);
 }
