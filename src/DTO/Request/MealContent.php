@@ -12,6 +12,7 @@ class MealContent
      * @var string
      *
      * @Assert\NotBlank
+     * @Assert\Type("alpha", message="The string {{ value }} contains an illegal character: it can only contain letters")
      */
     private $mealContent;
 
