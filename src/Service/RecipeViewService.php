@@ -74,7 +74,8 @@ class RecipeViewService implements RecipeView
                 $recipe->getName(),
                 $recipe->getPrep(),
                 $recipe->getCook(),
-                $recipe->getType()
+                $recipe->getType(),
+                $recipe->getImageLink()
             );
         }
 
@@ -104,6 +105,8 @@ class RecipeViewService implements RecipeView
             $ingredient,
             $direction,
             $recipe->getType(),
+            $recipe->getImageLink(),
+            $recipe->getImageSource(),
             $recipe->getAuthor()
         );
     }

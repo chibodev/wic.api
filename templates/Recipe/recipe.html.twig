@@ -11,9 +11,17 @@
 
     {% if (data.status == 'green') %}
 
-        <h4>{{ data.recipe.name|e }} <small class="float-right">source: {{ data.recipe.author|e }}</small></h4>
-        <hr>
-        <span class="breadcrumb">Preparation: {{ data.recipe.prep|e }} min | Cooking: {{ data.recipe.cook|e }} min</span>
+        <div class="row">
+            <div class="col-md-7">
+                <h4>{{ data.recipe.name|e }}</h4>
+                <small>by: {{ data.recipe.author|capitalize|e }}</small>
+                <span class="breadcrumb"> Preparation: {{ data.recipe.prep|e }} min</span>
+                <span class="breadcrumb"> Cooking: {{ data.recipe.cook|e }} min</span>
+            </div>
+            <div class="col-md-5">
+                <img src="{{ data.recipe.imageLink }}" class="rounded float-left img-thumbnail" alt="{{ data.recipe.name|lower }}">
+            </div>
+        </div>
         <table class="table">
             <tbody>
                 <tr>
