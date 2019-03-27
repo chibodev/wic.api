@@ -20,10 +20,16 @@ class Builder
     public function mainMenu(RequestStack $requestStack): ItemInterface
     {
         $menu = $this->factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'nav navbar-nav');
+        $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         $menu->addChild('Home', ['route' => 'homepage']);
         $menu->addChild('Recipe', ['route' => 'recipe']);
         $menu->addChild('Add Recipe', ['route' => 'add-recipe']);
+
+        // menu items
+        foreach ($menu as $child) {
+            $child->setLinkAttribute('class', 'nav-link')
+                ->setAttribute('class', 'nav-item');
+        }
 
         return $menu;
     }
