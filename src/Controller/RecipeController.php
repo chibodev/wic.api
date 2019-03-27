@@ -36,7 +36,7 @@ class RecipeController extends AbstractController
      *
      */
     /**
-     * @Route("/get/recipe", name="recipe")
+     * @Route("/", name="recipe")
      *
      * @throws Exception
      */
@@ -60,7 +60,7 @@ class RecipeController extends AbstractController
                 $params['status'] = 'yellow';
                 $params['message'] = $recipe->getMessage();
             }
-            else{
+            else {
 
                 $params['status'] = 'green';
                 $recipes = [];
@@ -71,6 +71,28 @@ class RecipeController extends AbstractController
             }
         }
         return $this->render('Recipe/search.html.twig', ['searchForm' => $form->createView(), 'data' => $params]);
+    }
+
+    /**
+     * @Route("/get/{uuid}", name="recipe_uuid")
+     *
+     * @throws Exception
+     */
+    public function recipeByUuidAction(string $uuid): Response
+    {
+
+        $recipe = $this->recipeView->getRecipeByUuid($uuid);
+
+        if ($recipe instanceof NotFound){
+            $params['status'] = 'red';
+            $this->addFlash('error', $recipe->getMessage());
+        }
+        else {
+            $params['status'] = 'green';
+            $params['recipe'] = $recipe;
+        }
+
+        return $this->render('Recipe/recipe.html.twig', ['data' => $params]);
     }
 
     /**
