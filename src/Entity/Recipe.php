@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\ValueObject\RecipeType;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -67,13 +68,25 @@ class Recipe
      * @var string
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $source;
+    private $author;
+
+    /**
+     * @var RecipeType
+     * @ORM\Embedded(class="App\ValueObject\RecipeType", columnPrefix=false)
+     */
+    private $type;
 
     /**
      * @throws Exception
      */
-    public function __construct(string $name, ?int $prep, ?int $cook, ?Ingredient $ingredient, ?Direction $direction, ?string $source)
-    {
+    public function __construct(
+        string $name,
+        ?int $prep,
+        ?int $cook,
+        ?Ingredient $ingredient,
+        ?Direction $direction,
+        ?string $author,
+        RecipeType $type) {
         $this->name = $name;
         $this->ingredient = $ingredient;
         $uuid = Uuid::uuid4();
@@ -82,7 +95,8 @@ class Recipe
         $this->prep = $prep;
         $this->cook = $cook;
         $this->direction = $direction;
-        $this->source = $source;
+        $this->author = $author;
+        $this->type = $type;
     }
 
     public function getId(): ?int
@@ -145,13 +159,18 @@ class Recipe
         $this->direction = $direction;
     }
 
-    public function getSource(): string
+    public function getAuthor(): string
     {
-        return $this->source;
+        return $this->author;
     }
 
-    public function setSource(string $source): void
+    public function setAuthor(string $source): void
     {
-        $this->source = $source;
+        $this->author = $source;
+    }
+
+    public function getType(): RecipeType
+    {
+        return $this->type;
     }
 }
