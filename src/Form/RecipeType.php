@@ -15,10 +15,11 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('mealContent', TextType::class, [
-                'required' => true,
-                'label' => 'Meal Content',
+                'required' => true, 'label' => false, 'attr' => ['placeholder' => 'Enter meal content']
             ] )
-            ->add('search', SubmitType::class)
+            ->setAttributes(['class' => 'input-group'])
+
+            ->add('search', SubmitType::class, ['attr' => ['class' => 'btn-lg btn-primary rounded float-right'] ])
         ;
     }
 }
