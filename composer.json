@@ -11,6 +11,7 @@
         "doctrine/orm": "^2.6",
         "friendsofsymfony/rest-bundle": "^2.5",
         "knplabs/knp-menu-bundle": "^2.0",
+        "myclabs/php-enum": "^1.6",
         "nelmio/api-doc-bundle": "^3.4",
         "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.2",
