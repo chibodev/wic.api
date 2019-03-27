@@ -84,12 +84,12 @@ class RecipeViewService implements RecipeView
 
     public function getRecipeByUuid(string $uuid)
     {
-        $recipe = $this->recipeRepo->findOneBy(['uuid' => $uuid]);
-
         if (!$this->isUuidValid($uuid)){
             $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
             return new NotFound(sprintf('The parameter "%s" is invalid', $uuid));
         }
+
+        $recipe = $this->recipeRepo->findOneBy(['uuid' => $uuid]);
 
         if(!$recipe) {
             return new NotFound(sprintf('No recipe associated with the entered id "%s"', $uuid));
