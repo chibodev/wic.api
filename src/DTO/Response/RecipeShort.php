@@ -18,14 +18,23 @@ class RecipeShort
     private $uuid;
     /** @var string */
     private $type;
+    /** @var string|null */
+    private $imageLink;
 
-    public function __construct(string $uuid, string $name, ?int $prepInMinutes, ?int $cookInMinutes, RecipeType $type)
-    {
+    public function __construct(
+        string $uuid,
+        string $name,
+        ?int $prepInMinutes,
+        ?int $cookInMinutes,
+        RecipeType $type,
+        ?string $imageLink
+    ) {
         $this->name = $name;
         $this->prep = $prepInMinutes;
         $this->cook = $cookInMinutes;
         $this->uuid = $uuid;
         $this->type = $type->getValue();
+        $this->imageLink = $imageLink;
     }
 
     public function getName(): string
@@ -51,5 +60,10 @@ class RecipeShort
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->imageLink;
     }
 }

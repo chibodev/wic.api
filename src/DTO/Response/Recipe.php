@@ -22,6 +22,10 @@ class Recipe
     private $direction;
     /** @var string */
     private $type;
+    /** @var string|null */
+    private $imageLink;
+    /** @var string|null */
+    private $imageSource;
 
     public function __construct(string $name,
         ?int $prepInMinutes,
@@ -29,6 +33,8 @@ class Recipe
         array $ingredient,
         array $direction,
         RecipeType $type,
+        ?string $imageLink,
+        ?string $imageSource,
         string $author = 'N/A'
     ) {
         $this->name = $name;
@@ -38,6 +44,8 @@ class Recipe
         $this->direction = $direction;
         $this->author = $author;
         $this->type = $type->getValue();
+        $this->imageLink = $imageLink;
+        $this->imageSource = $imageSource;
     }
 
     public function getName(): string
@@ -73,5 +81,15 @@ class Recipe
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->imageLink;
+    }
+
+    public function getImageSource(): ?string
+    {
+        return $this->imageSource;
     }
 }
