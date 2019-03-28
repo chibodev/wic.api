@@ -15,19 +15,38 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+        exclude: '../src/{Migrations,Kernel.php}'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
+        tags:
+            - { name: serializer.normalizer }
+
+    #========== Infrastructure ==========#
+
+    App\Infrastructure\:
+        resource: '../src/Infrastructure/*'
+        exclude:  '../src/Infrastructure/{Entity,DTO,Tests,Controller}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Infrastructure\Controller\:
+        resource: '../src/Infrastructure/Controller'
+        tags: ['controller.service_arguments']
+
+    #========== AMS ==========#
+    App\AMS\:
+        resource: '../src/AMS/*'
+        exclude:  '../src/AMS/{Entity,DTO,Tests,Controller}'
+
+    App\AMS\Controller\:
+        resource: '../src/AMS/Controller'
+        tags: ['controller.service_arguments']
+
     app.menu_builder:
-        class: App\Menu\Builder
+        class: App\AMS\Menu\Builder
         arguments: ["@knp_menu.factory"]
 
     app.main_menu:
@@ -37,6 +56,3 @@ services:
         tags:
             - { name: knp_menu.menu, alias: main }
 
-    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
-        tags:
-            - { name: serializer.normalizer }
