@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Exception;
+use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,6 +20,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UnknownRepository extends ServiceEntityRepository
 {
+    /**
+     * @throws LogicException
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Unknown::class);
@@ -27,7 +31,7 @@ class UnknownRepository extends ServiceEntityRepository
     /**
      * @throws Exception
      */
-    public function save(Unknown $unknown)
+    public function save(Unknown $unknown): void
     {
         try {
             $this->_em->persist($unknown);

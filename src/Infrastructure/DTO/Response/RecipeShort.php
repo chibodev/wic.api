@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\DTO\Response;
 
 use App\Infrastructure\PublicInterface\DTO\RecipeShortInterface;
-use App\Infrastructure\ValueObject\RecipeType;
 
 class RecipeShort implements RecipeShortInterface
 {
