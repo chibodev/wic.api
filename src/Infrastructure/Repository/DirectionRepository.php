@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
+use App\EntityInterface\DirectionInterface;
+use App\EntityInterface\RecipeInterface;
 use App\Infrastructure\Entity\Direction;
-use App\Infrastructure\Entity\Recipe;
 use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Direction|null find($id, $lockMode = null, $lockVersion = null)
- * @method Direction|null findOneBy(array $criteria, array $orderBy = null)
- * @method Direction[]    findAll()
- * @method Direction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DirectionInterface|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DirectionInterface|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DirectionInterface[]    findAll()
+ * @method DirectionInterface[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DirectionRepository extends ServiceEntityRepository implements DirectionRepositoryInterface
 {
@@ -27,7 +28,7 @@ class DirectionRepository extends ServiceEntityRepository implements DirectionRe
         parent::__construct($registry, Direction::class);
     }
 
-    public function findOneByRecipeForDto(Recipe $recipe): array
+    public function findOneByRecipeForDto(RecipeInterface $recipe): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
 

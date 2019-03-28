@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\AMS\Controller;
 
-use App\AMS\Form\RecipeType;
+use App\AMS\Form\MealContentType;
 use App\Infrastructure\PublicInterface\DTO\MealContentInterface as MealContentRequestDTO;
 use App\Infrastructure\PublicInterface\DTO\NotFoundInterface as NotFoundResponseDTO;
 use App\Infrastructure\PublicInterface\RecipeView;
@@ -30,7 +30,7 @@ class RecipeController extends AbstractController
      */
     public function recipeBySearchTermAction(Request $request, MealContentRequestDTO $mealContent): Response
     {
-        $form = $this->createForm(RecipeType::class, $mealContent);
+        $form = $this->createForm(MealContentType::class, $mealContent);
 
         $form->handleRequest($request);
 

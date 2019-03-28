@@ -2,6 +2,9 @@
 
 namespace App\Infrastructure\Entity;
 
+use App\EntityInterface\DirectionInterface;
+use App\EntityInterface\IngredientInterface;
+use App\EntityInterface\RecipeInterface;
 use App\Infrastructure\ValueObject\RecipeType;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +15,7 @@ use Ramsey\Uuid\Uuid;
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\RecipeRepository")
  * @ORM\Table(indexes={@ORM\Index(name="name_idx", columns={"name"})})
  */
-class Recipe
+class Recipe implements RecipeInterface
 {
     /**
      * @var integer
@@ -53,14 +56,14 @@ class Recipe
     private $createdAt;
 
     /**
-     * @var Ingredient|null
-     * @ORM\OneToMany(targetEntity="App\Infrastructure\Entity\Ingredient", mappedBy="recipe")
+     * @var IngredientInterface|null
+     * @ORM\OneToMany(targetEntity="App\EntityInterface\IngredientInterface", mappedBy="recipe")
      */
     private $ingredient;
 
     /**
-     * @var Direction|null
-     * @ORM\OneToMany(targetEntity="App\Infrastructure\Entity\Direction", mappedBy="recipe")
+     * @var DirectionInterface|null
+     * @ORM\OneToMany(targetEntity="App\EntityInterface\DirectionInterface", mappedBy="recipe")
      */
     private $direction;
 
@@ -95,8 +98,8 @@ class Recipe
         string $name,
         ?int $prep,
         ?int $cook,
-        ?Ingredient $ingredient,
-        ?Direction $direction,
+        ?IngredientInterface $ingredient,
+        ?DirectionInterface $direction,
         ?string $author,
         RecipeType $type,
         string $imageLink,
@@ -130,12 +133,12 @@ class Recipe
         return $this->uuid;
     }
 
-    public function setIngredient(?Ingredient $ingredient): void
+    public function setIngredient(?IngredientInterface $ingredient): void
     {
         $this->ingredient = $ingredient;
     }
 
-    public function getIngredient(): ?Ingredient
+    public function getIngredient(): ?IngredientInterface
     {
         return $this->ingredient;
     }
@@ -165,12 +168,12 @@ class Recipe
         $this->cook = $cook;
     }
 
-    public function getDirection(): ?Direction
+    public function getDirection(): ?DirectionInterface
     {
         return $this->direction;
     }
 
-    public function setDirection(?Direction $direction): void
+    public function setDirection(?DirectionInterface $direction): void
     {
         $this->direction = $direction;
     }

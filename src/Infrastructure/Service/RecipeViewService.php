@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Service;
 
-use App\Infrastructure\Entity\Recipe as RecipeEntity;
+use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
 use App\Infrastructure\Entity\Unknown;
 use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
 use App\Infrastructure\PublicInterface\DTO\NotFoundInterface;
@@ -16,8 +16,8 @@ use App\Infrastructure\PublicInterface\RecipeView;
 use App\Infrastructure\Repository\UnknownRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Uuid as UuidConstraint;
+use Symfony\Component\Validator\Validation;
 
 class RecipeViewService implements RecipeView
 {
@@ -81,7 +81,7 @@ class RecipeViewService implements RecipeView
 
         $recipeDto = [];
 
-        /** @var RecipeEntity $recipe */
+        /** @var RecipeEntityInterface $recipe */
         foreach ($recipes as $recipe){
             $this->recipeShort->setName($recipe->getName());
             $this->recipeShort->setUuid($recipe->getUuid());

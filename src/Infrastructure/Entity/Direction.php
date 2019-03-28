@@ -2,12 +2,14 @@
 
 namespace App\Infrastructure\Entity;
 
+use App\EntityInterface\DirectionInterface;
+use App\EntityInterface\RecipeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\DirectionRepository")
  */
-class Direction
+class Direction implements DirectionInterface
 {
     /**
      * @ORM\Id()
@@ -22,13 +24,13 @@ class Direction
     private $description;
 
     /**
-     * @var Recipe
-     * @ORM\ManyToOne(targetEntity="App\Infrastructure\Entity\Recipe", inversedBy="direction")
+     * @var RecipeInterface
+     * @ORM\ManyToOne(targetEntity="App\EntityInterface\RecipeInterface", inversedBy="direction")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
 
-    public function __construct(string $description, Recipe $recipe)
+    public function __construct(string $description, RecipeInterface $recipe)
     {
         $this->description = $description;
         $this->recipe = $recipe;
@@ -49,7 +51,7 @@ class Direction
         $this->description = $description;
     }
 
-    public function getRecipe(): Recipe
+    public function getRecipe(): RecipeInterface
     {
         return $this->recipe;
     }
