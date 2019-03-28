@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Service;
+namespace App\Infrastructure\PublicInterface;
 
 use App\Infrastructure\DTO\Response\NotFound;
 use App\Infrastructure\DTO\Response\Recipe;

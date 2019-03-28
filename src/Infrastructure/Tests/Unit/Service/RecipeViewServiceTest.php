@@ -10,11 +10,12 @@ use App\Infrastructure\Entity\Direction;
 use App\Infrastructure\Entity\Ingredient;
 use App\Infrastructure\Entity\Recipe;
 use App\Infrastructure\Entity\Unknown;
+use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
 use App\Infrastructure\Repository\DirectionRepository;
 use App\Infrastructure\Repository\IngredientRepository;
 use App\Infrastructure\Repository\RecipeRepository;
 use App\Infrastructure\Repository\UnknownRepository;
-use App\Infrastructure\Service\RecipeViewService;
+use App\Infrastructure\Service\RecipeService;
 use App\Infrastructure\ValueObject\RecipeType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -29,11 +30,11 @@ class RecipeViewServiceTest extends TestCase
     private $unknownRepo;
     /** @var IngredientRepository|ObjectProphecy */
     private $ingredientRepo;
-    /** @var DirectionRepository|ObjectProphecy */
+    /** @var DirectionRepositoryInterface|ObjectProphecy */
     private $directionRepo;
     /** @var LoggerInterface|ObjectProphecy */
     private $logger;
-    /** @var RecipeViewService */
+    /** @var RecipeService */
     private $subject;
 
     public function setUp()
@@ -45,7 +46,7 @@ class RecipeViewServiceTest extends TestCase
         $this->directionRepo = $this->prophesize(DirectionRepository::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
 
-        $this->subject = new RecipeViewService($this->recipeRepo->reveal(), $this->unknownRepo->reveal(), $this->ingredientRepo->reveal(),
+        $this->subject = new RecipeService($this->recipeRepo->reveal(), $this->unknownRepo->reveal(), $this->ingredientRepo->reveal(),
             $this->directionRepo->reveal(), $this->logger->reveal());
     }
 

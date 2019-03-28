@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Service;
 
-use App\Infrastructure\DTO\Response\NotFound;
-use App\Infrastructure\DTO\Response\Recipe;
-use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\Entity\Recipe as RecipeEntity;
 use App\Infrastructure\Entity\Unknown;
-use App\Infrastructure\Repository\DirectionRepository;
-use App\Infrastructure\Repository\IngredientRepository;
-use App\Infrastructure\Repository\RecipeRepository;
+use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
+use App\Infrastructure\PublicInterface\DTO\NotFoundInterface;
+use App\Infrastructure\PublicInterface\DTO\RecipeInterface;
+use App\Infrastructure\PublicInterface\DTO\RecipeShortInterface;
+use App\Infrastructure\PublicInterface\IngredientRepositoryInterface;
+use App\Infrastructure\PublicInterface\RecipeRepositoryInterface;
+use App\Infrastructure\PublicInterface\RecipeView;
 use App\Infrastructure\Repository\UnknownRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -32,12 +33,18 @@ class RecipeViewService implements RecipeView
         self::AND,
         self::IS
     ];
+    private $notFound;
+    private $recipeShort;
+    private $recipeDto;
 
     public function __construct(
-        RecipeRepository $recipeRepo,
+        RecipeRepositoryInterface $recipeRepo,
         UnknownRepository $unknownRepo,
-        IngredientRepository $ingredientRepo,
-        DirectionRepository $directionRepo,
+        IngredientRepositoryInterface $ingredientRepo,
+        DirectionRepositoryInterface $directionRepo,
+        NotFoundInterface $notFound,
+        RecipeShortInterface $recipeShort,
+        RecipeInterface $recipeDto,
         LoggerInterface $logger
     ) {
         $this->recipeRepo = $recipeRepo;
@@ -45,6 +52,9 @@ class RecipeViewService implements RecipeView
         $this->ingredientRepo = $ingredientRepo;
         $this->directionRepo = $directionRepo;
         $this->logger = $logger;
+        $this->notFound = $notFound;
+        $this->recipeShort = $recipeShort;
+        $this->recipeDto = $recipeDto;
     }
 
     public function getRecipeByMealContent(string $mealContent)
@@ -62,21 +72,24 @@ class RecipeViewService implements RecipeView
             }
             $this->unknownRepo->save($unknown);
 
-            return new NotFound(sprintf('Unfortunately there is no available recipe/ingredient associated with "%s" at this point in time.', $mealContent));
+            $this->notFound->setMessage(
+                sprintf('Unfortunately there is no available recipe/ingredient associated with "%s" at this point in time.', $mealContent)
+            );
+
+            return $this->notFound;
         }
 
         $recipeDto = [];
 
         /** @var RecipeEntity $recipe */
         foreach ($recipes as $recipe){
-            $recipeDto[] = new RecipeShort(
-                $recipe->getUuid(),
-                $recipe->getName(),
-                $recipe->getPrep(),
-                $recipe->getCook(),
-                $recipe->getType(),
-                $recipe->getImageLink()
-            );
+            $this->recipeShort->setName($recipe->getName());
+            $this->recipeShort->setUuid($recipe->getUuid());
+            $this->recipeShort->setPrep($recipe->getPrep());
+            $this->recipeShort->setCook($recipe->getCook());
+            $this->recipeShort->setType($recipe->getType()->getValue());
+            $this->recipeShort->setImageLink($recipe->getImageLink());
+            $recipeDto[] = $this->recipeShort;
         }
 
         return $recipeDto;
@@ -86,29 +99,34 @@ class RecipeViewService implements RecipeView
     {
         if (!$this->isUuidValid($uuid)){
             $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
-            return new NotFound(sprintf('The parameter "%s" is invalid', $uuid));
+            $this->notFound->setMessage(
+                sprintf('The parameter "%s" is invalid', $uuid)
+            );
+            return $this->notFound;
         }
 
         $recipe = $this->recipeRepo->findOneBy(['uuid' => $uuid]);
 
         if(!$recipe) {
-            return new NotFound(sprintf('No recipe associated with the entered id "%s"', $uuid));
+            $this->notFound->setMessage(
+                sprintf('No recipe associated with the entered id "%s"', $uuid)
+            );
         }
 
         $direction = $this->directionRepo->findOneByRecipeForDto($recipe);
         $ingredient = $this->ingredientRepo->findOneByRecipeForDto($recipe);
 
-        return new Recipe(
-            $recipe->getName(),
-            $recipe->getPrep(),
-            $recipe->getCook(),
-            $ingredient,
-            $direction,
-            $recipe->getType(),
-            $recipe->getImageLink(),
-            $recipe->getImageSource(),
-            $recipe->getAuthor()
-        );
+        $this->recipeDto->setName($recipe->getName());
+        $this->recipeDto->setPrep($recipe->getPrep());
+        $this->recipeDto->setCook($recipe->getCook());
+        $this->recipeDto->setIngredient($ingredient);
+        $this->recipeDto->setDirection($direction);
+        $this->recipeDto->setType($recipe->getType()->getValue());
+        $this->recipeDto->setImageLink($recipe->getImageLink());
+        $this->recipeDto->setImageSource($recipe->getImageSource());
+        $this->recipeDto->setAuthor($recipe->getAuthor());
+
+        return $this->recipeDto;
     }
 
     private function formatString(string $toBeFormatted): array

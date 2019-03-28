@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Repository;
 
-use App\Infrastructure\DTO\Response\Ingredient as IngredientDTO;
 use App\Infrastructure\Entity\Ingredient;
 use App\Infrastructure\Entity\Recipe;
+use App\Infrastructure\PublicInterface\IngredientRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -15,7 +17,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Ingredient[]    findAll()
  * @method Ingredient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class IngredientRepository extends ServiceEntityRepository
+class IngredientRepository extends ServiceEntityRepository implements IngredientRepositoryInterface
 {
     /**
      * @throws LogicException
@@ -25,9 +27,6 @@ class IngredientRepository extends ServiceEntityRepository
         parent::__construct($registry, Ingredient::class);
     }
 
-    /**
-     * @return IngredientDTO[]
-     */
     public function findOneByRecipeForDto(Recipe $recipe): ?array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

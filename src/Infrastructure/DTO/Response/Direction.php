@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\DTO\Response;
 
-class Direction
+use App\Infrastructure\PublicInterface\DTO\DirectionInterface;
+
+class Direction implements DirectionInterface
 {
     /** @var string|null */
     private $description;

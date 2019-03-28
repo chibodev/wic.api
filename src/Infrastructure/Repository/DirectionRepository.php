@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Repository;
 
-use App\Infrastructure\DTO\Response\Direction as DirectionDTO;
 use App\Infrastructure\Entity\Direction;
 use App\Infrastructure\Entity\Recipe;
+use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -15,7 +17,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Direction[]    findAll()
  * @method Direction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DirectionRepository extends ServiceEntityRepository
+class DirectionRepository extends ServiceEntityRepository implements DirectionRepositoryInterface
 {
     /**
      * @throws LogicException
@@ -25,9 +27,6 @@ class DirectionRepository extends ServiceEntityRepository
         parent::__construct($registry, Direction::class);
     }
 
-    /**
-     * @return DirectionDTO[]
-     */
     public function findOneByRecipeForDto(Recipe $recipe): array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

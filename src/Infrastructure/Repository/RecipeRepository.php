@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Repository;
 
 use App\Infrastructure\Entity\Ingredient;
 use App\Infrastructure\Entity\Recipe;
+use App\Infrastructure\PublicInterface\RecipeRepositoryInterface;
 use App\Infrastructure\Service\LikeQueryHelpers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -16,7 +19,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Recipe[]    findAll()
  * @method Recipe[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RecipeRepository extends ServiceEntityRepository
+class RecipeRepository extends ServiceEntityRepository implements RecipeRepositoryInterface
 {
     use LikeQueryHelpers;
 
@@ -28,9 +31,6 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    /**
-     * @return Recipe[]
-     */
     public function findByMealContent(array $mealContents): ?array
     {
         $queryBuilder = $this->_em->createQueryBuilder();

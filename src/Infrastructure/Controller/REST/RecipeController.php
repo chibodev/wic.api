@@ -7,7 +7,7 @@ namespace App\Infrastructure\Controller\REST;
 use App\Infrastructure\DTO\Request\MealContent;
 use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\DTO\Response\Recipe;
-use App\Infrastructure\Service\RecipeView;
+use App\Infrastructure\PublicInterface\RecipeView;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\DTO\Response;
 
+use App\Infrastructure\PublicInterface\DTO\RecipeShortInterface;
 use App\Infrastructure\ValueObject\RecipeType;
 
-class RecipeShort
+class RecipeShort implements RecipeShortInterface
 {
     /** @var string */
     private $name;
@@ -20,22 +21,6 @@ class RecipeShort
     private $type;
     /** @var string|null */
     private $imageLink;
-
-    public function __construct(
-        string $uuid,
-        string $name,
-        ?int $prepInMinutes,
-        ?int $cookInMinutes,
-        RecipeType $type,
-        ?string $imageLink
-    ) {
-        $this->name = $name;
-        $this->prep = $prepInMinutes;
-        $this->cook = $cookInMinutes;
-        $this->uuid = $uuid;
-        $this->type = $type->getValue();
-        $this->imageLink = $imageLink;
-    }
 
     public function getName(): string
     {
@@ -65,5 +50,35 @@ class RecipeShort
     public function getImageLink(): ?string
     {
         return $this->imageLink;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setPrep(?int $prep): void
+    {
+        $this->prep = $prep;
+    }
+
+    public function setCook(?int $cook): void
+    {
+        $this->cook = $cook;
+    }
+
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function setImageLink(?string $imageLink): void
+    {
+        $this->imageLink = $imageLink;
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\DTO\Response;
 
-use App\Infrastructure\ValueObject\RecipeType;
+use App\Infrastructure\PublicInterface\DTO\RecipeInterface;
 
-class Recipe
+class Recipe implements RecipeInterface
 {
     /** @var string */
     private $name;
@@ -27,25 +27,8 @@ class Recipe
     /** @var string|null */
     private $imageSource;
 
-    public function __construct(string $name,
-        ?int $prepInMinutes,
-        ?int $cookInMinutes,
-        array $ingredient,
-        array $direction,
-        RecipeType $type,
-        ?string $imageLink,
-        ?string $imageSource,
-        string $author = 'N/A'
-    ) {
-        $this->name = $name;
-        $this->prep = $prepInMinutes;
-        $this->cook = $cookInMinutes;
-        $this->ingredient = $ingredient;
-        $this->direction = $direction;
+    public function __construct(string $author = 'N/A') {
         $this->author = $author;
-        $this->type = $type->getValue();
-        $this->imageLink = $imageLink;
-        $this->imageSource = $imageSource;
     }
 
     public function getName(): string
@@ -91,5 +74,50 @@ class Recipe
     public function getImageSource(): ?string
     {
         return $this->imageSource;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setPrep(?int $prep): void
+    {
+        $this->prep = $prep;
+    }
+
+    public function setCook(?int $cook): void
+    {
+        $this->cook = $cook;
+    }
+
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
+    }
+
+    public function setIngredient(array $ingredient): void
+    {
+        $this->ingredient = $ingredient;
+    }
+
+    public function setDirection(array $direction): void
+    {
+        $this->direction = $direction;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function setImageLink(?string $imageLink): void
+    {
+        $this->imageLink = $imageLink;
+    }
+
+    public function setImageSource(?string $imageSource): void
+    {
+        $this->imageSource = $imageSource;
     }
 }
