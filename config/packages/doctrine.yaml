@@ -28,15 +28,15 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            App\Entity\Recipe:
+            App\Infrastructure\Entity\Recipe:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App\Entity
-            App\ValueObject\RecipeType:
+                dir: '%kernel.project_dir%/src/Infrastructure/Entity'
+                prefix: 'App\Infrastructure\Entity'
+                alias: App\Infrastructure\Entity
+            App\Infrastructure\ValueObject\RecipeType:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/ValueObject'
-                prefix: 'App\ValueObject\RecipeType'
-                alias: App\ValueObject\RecipeType
+                dir: '%kernel.project_dir%/src/Infrastructure/ValueObject'
+                prefix: 'App\Infrastructure\ValueObject\RecipeType'
+                alias: App\Infrastructure\ValueObject\RecipeType

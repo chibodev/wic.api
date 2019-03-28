@@ -1,3 +1,7 @@
-controllers:
-    resource: ../../src/Controller/
+ams:
+    resource: ../../src/AMS/Controller/
+    type: annotation
+
+infrastructure:
+    resource: ../../src/Infrastructure/Controller/
     type: annotation
