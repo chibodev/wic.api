@@ -5,6 +5,7 @@ namespace App\Infrastructure\Entity;
 use App\EntityInterface\DirectionInterface;
 use App\EntityInterface\IngredientInterface;
 use App\EntityInterface\RecipeInterface;
+use App\EntityInterface\RecipeTypeInterface;
 use App\Infrastructure\ValueObject\RecipeType;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,7 +75,7 @@ class Recipe implements RecipeInterface
     private $author;
 
     /**
-     * @var RecipeType
+     * @var RecipeTypeInterface
      * @ORM\Embedded(class="App\Infrastructure\ValueObject\RecipeType", columnPrefix=false)
      */
     private $type;
@@ -101,7 +102,7 @@ class Recipe implements RecipeInterface
         ?IngredientInterface $ingredient,
         ?DirectionInterface $direction,
         ?string $author,
-        RecipeType $type,
+        RecipeTypeInterface $type,
         string $imageLink,
         string $imageSource) {
         $this->name = $name;
@@ -188,7 +189,7 @@ class Recipe implements RecipeInterface
         $this->author = $source;
     }
 
-    public function getType(): RecipeType
+    public function getType(): RecipeTypeInterface
     {
         return $this->type;
     }

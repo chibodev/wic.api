@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-use App\Infrastructure\ValueObject\RecipeType;
 use DateTimeImmutable;
 
 interface RecipeInterface
@@ -37,7 +36,7 @@ interface RecipeInterface
 
     public function setAuthor(string $source): void;
 
-    public function getType(): RecipeType;
+    public function getType(): RecipeTypeInterface;
 
     public function setImageLink(string $imageLink): void;
 
