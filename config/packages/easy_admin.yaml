@@ -1,0 +1,28 @@
+easy_admin:
+  site_name: "What I'll Cook (WIC)"
+  design:
+    assets:
+      css:
+        # ...
+        - 'bundles/easyadmin/bootstrap-all.css'
+      js:
+        - 'bundles/easyadmin/bootstrap-all.js'
+  entities:
+    Recipe:
+      class: App\Infrastructure\Entity\Recipe
+      list:
+        fields: ['id', 'uuid', 'name', 'type', 'author', 'prep', 'cook',
+                 { property: 'imageUrl', type: 'url' }, 'imageSource', { property: 'approved', type: 'toggle' }, { property: 'createdAt', format: 'Y-m-d' }]
+      form:
+        fields: ['name',
+                 { property: 'type', type: 'choice', type_options: {choices: {'BEVERAGE':'BEVERAGE', 'FOOD':'FOOD', 'INCONCLUSIVE': 'INCONCLUSIVE'}}},
+                 'author', 'prep', 'cook', { property: 'imageUrl', type: 'url' }, 'imageSource']
+
+    Ingredient:
+      class: App\Infrastructure\Entity\Ingredient
+    Direction:
+      class: App\Infrastructure\Entity\Direction
+      list:
+        fields: ['id', 'description', 'recipe']
+    Unknown:
+      class: App\Infrastructure\Entity\Unknown
