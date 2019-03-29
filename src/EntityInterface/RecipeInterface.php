@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-use DateTimeImmutable;
+use DateTime;
 
 interface RecipeInterface
 {
-    public function getId(): ?int;
+    public function setName(string $name): void;
 
-    public function getName(): string;
+    public function getName(): ?string;
 
     public function getUuid(): string;
 
@@ -22,7 +22,7 @@ interface RecipeInterface
 
     public function getCook(): ?int;
 
-    public function getCreatedAt(): DateTimeImmutable;
+    public function getCreatedAt(): DateTime;
 
     public function setPrep(int $prep): void;
 
@@ -30,20 +30,21 @@ interface RecipeInterface
 
     public function getDirection(): ?DirectionInterface;
 
-    public function setDirection(?DirectionInterface $direction): void;
+    public function setDirection(DirectionInterface $direction): void;
 
-    public function getAuthor(): string;
+    public function getAuthor(): ?string;
 
     public function setAuthor(string $source): void;
 
-    public function getType(): RecipeTypeInterface;
+    public function setType(string $type): void;
 
-    public function setImageLink(string $imageLink): void;
+    public function getType(): string;
 
-    public function getImageLink(): ?string;
+    public function setImageUrl(string $imageUrl): void;
+
+    public function getImageUrl(): ?string;
 
     public function setImageSource(string $imageSource): void;
 
     public function getImageSource(): ?string;
 }
-

@@ -20,6 +20,7 @@ class Ingredient implements IngredientInterface
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=25, nullable=true)
      */
     private $description;
@@ -43,13 +44,6 @@ class Ingredient implements IngredientInterface
      */
     private $recipe;
 
-    public function __construct(RecipeInterface $recipe, string $description, ?float $quantity, ?string $unit)
-    {
-        $this->description = $description;
-        $this->quantity = $quantity;
-        $this->unit = $unit;
-        $this->recipe = $recipe;
-    }
 
     public function getId(): ?int
     {
@@ -61,11 +55,9 @@ class Ingredient implements IngredientInterface
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getQuantity(): ?float
@@ -88,8 +80,17 @@ class Ingredient implements IngredientInterface
         $this->unit = $unit;
     }
 
+    public function setRecipe(RecipeInterface $recipe): void
+    {
+        $this->recipe = $recipe;
+    }
+
     public function getRecipe(): ?RecipeInterface
     {
         return $this->recipe;
+    }
+
+    public function __toString() {
+        return (string)$this->getId();
     }
 }

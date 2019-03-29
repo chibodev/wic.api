@@ -5,12 +5,13 @@ namespace App\Infrastructure\Entity;
 use App\EntityInterface\DirectionInterface;
 use App\EntityInterface\IngredientInterface;
 use App\EntityInterface\RecipeInterface;
-use App\EntityInterface\RecipeTypeInterface;
 use App\Infrastructure\ValueObject\RecipeType;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\RecipeRepository")
@@ -34,18 +35,29 @@ class Recipe implements RecipeInterface
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank
+     *
      * @ORM\Column(type="string", length=50, nullable=false, unique=true)
      */
     private $name;
 
     /**
      * @var integer
+     *
+     * @Assert\Type(type="integer")
+     * @Assert\GreaterThan(0)
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $prep;
 
     /**
      * @var integer
+     *
+     * @Assert\Type(type="integer")
+     * @Assert\GreaterThan(0)
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $cook;
@@ -75,16 +87,19 @@ class Recipe implements RecipeInterface
     private $author;
 
     /**
-     * @var RecipeTypeInterface
-     * @ORM\Embedded(class="App\Infrastructure\ValueObject\RecipeType", columnPrefix=false)
+     * @var string
+     * @ORM\Column(type="string", length=50, nullable=false)
      */
     private $type;
 
     /**
      * @var string
+     *
+     * @Assert\Url
+     *
      * @ORM\Column(type="string", nullable=true)
      */
-    private $imageLink;
+    private $imageUrl;
 
     /**
      * @var string
@@ -93,30 +108,20 @@ class Recipe implements RecipeInterface
     private $imageSource;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $approved = 0;
+
+    /**
      * @throws Exception
      */
-    public function __construct(
-        string $name,
-        ?int $prep,
-        ?int $cook,
-        ?IngredientInterface $ingredient,
-        ?DirectionInterface $direction,
-        ?string $author,
-        RecipeTypeInterface $type,
-        string $imageLink,
-        string $imageSource) {
-        $this->name = $name;
-        $this->ingredient = $ingredient;
+    public function __construct() {
         $uuid = Uuid::uuid4();
         $this->uuid = $uuid->toString();
-        $this->createdAt = new DateTimeImmutable();
-        $this->prep = $prep;
-        $this->cook = $cook;
-        $this->direction = $direction;
-        $this->author = $author;
-        $this->type = $type;
-        $this->imageLink = $imageLink;
-        $this->imageSource = $imageSource;
+        $this->createdAt = new DateTime();
+        $recipeType = new RecipeType(RecipeType::INCONCLUSIVE);
+        $this->type = $recipeType->getValue();
     }
 
     public function getId(): ?int
@@ -124,7 +129,12 @@ class Recipe implements RecipeInterface
         return $this->id;
     }
 
-    public function getName(): string
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -154,17 +164,17 @@ class Recipe implements RecipeInterface
         return $this->cook;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setPrep(int $prep): void
+    public function setPrep(?int $prep): void
     {
         $this->prep = $prep;
     }
 
-    public function setCook(int $cook): void
+    public function setCook(?int $cook): void
     {
         $this->cook = $cook;
     }
@@ -179,32 +189,37 @@ class Recipe implements RecipeInterface
         $this->direction = $direction;
     }
 
-    public function getAuthor(): string
+    public function getAuthor(): ?string
     {
         return $this->author;
     }
 
-    public function setAuthor(string $source): void
+    public function setAuthor(?string $source): void
     {
         $this->author = $source;
     }
 
-    public function getType(): RecipeTypeInterface
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function setImageLink(string $imageLink): void
+    public function setImageUrl(?string $imageUrl): void
     {
-        $this->imageLink = $imageLink;
+        $this->imageUrl = $imageUrl;
     }
 
-    public function getImageLink(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageLink;
+        return $this->imageUrl;
     }
 
-    public function setImageSource(string $imageSource): void
+    public function setImageSource(?string $imageSource): void
     {
         $this->imageSource = $imageSource;
     }
@@ -212,5 +227,20 @@ class Recipe implements RecipeInterface
     public function getImageSource(): ?string
     {
         return $this->imageSource;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('Recipe #%d: %s',$this->getId(), $this->getName());
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approved;
+    }
+
+    public function setApproved(bool $approved): void
+    {
+        $this->approved = $approved;
     }
 }

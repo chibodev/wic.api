@@ -6,11 +6,9 @@ namespace App\EntityInterface;
 
 interface IngredientInterface
 {
-    public function getId(): ?int;
-
     public function getDescription(): ?string;
 
-    public function setDescription(string $description);
+    public function setDescription(string $description): void;
 
     public function getQuantity(): ?float;
 

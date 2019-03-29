@@ -19,6 +19,7 @@ class Direction implements DirectionInterface
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="text")
      */
     private $description;
@@ -30,18 +31,13 @@ class Direction implements DirectionInterface
      */
     private $recipe;
 
-    public function __construct(string $description, RecipeInterface $recipe)
-    {
-        $this->description = $description;
-        $this->recipe = $recipe;
-    }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -51,8 +47,18 @@ class Direction implements DirectionInterface
         $this->description = $description;
     }
 
-    public function getRecipe(): RecipeInterface
+    public function setRecipe(RecipeInterface $recipe): void
+    {
+        $this->recipe = $recipe;
+    }
+
+    public function getRecipe(): ?RecipeInterface
     {
         return $this->recipe;
+    }
+
+    public function __toString() {
+
+        return (string)$this->getId();
     }
 }
