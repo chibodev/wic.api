@@ -13,7 +13,7 @@ class MealContent implements MealContentInterface
      * @var string
      *
      * @Assert\NotBlank
-     * @Assert\Type("alpha", message="The string {{ value }} contains an illegal character: it can only contain letters")
+     * @Assert\Regex("/^[a-zA-Z ]+$/", message="The string {{ value }} contains an illegal character: it can only contain letters")
      */
     private $mealContent;
 
