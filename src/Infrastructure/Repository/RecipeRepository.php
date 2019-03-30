@@ -40,6 +40,7 @@ class RecipeRepository extends ServiceEntityRepository implements RecipeReposito
             ->select('recipe')
             ->from(Recipe::class, 'recipe')
             ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
+            ->having('recipe.approved = 1')
         ;
 
         foreach ($mealContents as $index => $mealContent) {
