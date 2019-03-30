@@ -23,7 +23,7 @@ class Recipe implements RecipeInterface
     /** @var string */
     private $type;
     /** @var string|null */
-    private $imageLink;
+    private $imageUrl;
     /** @var string|null */
     private $imageSource;
 
@@ -66,9 +66,9 @@ class Recipe implements RecipeInterface
         return $this->type;
     }
 
-    public function getImageLink(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageLink;
+        return $this->imageUrl;
     }
 
     public function getImageSource(): ?string
@@ -76,7 +76,7 @@ class Recipe implements RecipeInterface
         return $this->imageSource;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -111,9 +111,9 @@ class Recipe implements RecipeInterface
         $this->type = $type;
     }
 
-    public function setImageLink(?string $imageLink): void
+    public function setImageUrl(?string $imageLink): void
     {
-        $this->imageLink = $imageLink;
+        $this->imageUrl = $imageLink;
     }
 
     public function setImageSource(?string $imageSource): void

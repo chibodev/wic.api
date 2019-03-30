@@ -16,7 +16,7 @@ interface RecipeShortInterface
 
     public function getType(): string;
 
-    public function getImageLink(): ?string;
+    public function getImageUrl(): ?string;
 
     public function setName(string $name): void;
 
@@ -28,5 +28,5 @@ interface RecipeShortInterface
 
     public function setType(string $type): void;
 
-    public function setImageLink(?string $imageLink): void;
+    public function setImageUrl(?string $imageUrl): void;
 }

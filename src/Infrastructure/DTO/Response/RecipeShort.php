@@ -19,7 +19,7 @@ class RecipeShort implements RecipeShortInterface
     /** @var string */
     private $type;
     /** @var string|null */
-    private $imageLink;
+    private $imageUrl;
 
     public function getName(): string
     {
@@ -46,9 +46,9 @@ class RecipeShort implements RecipeShortInterface
         return $this->type;
     }
 
-    public function getImageLink(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageLink;
+        return $this->imageUrl;
     }
 
     public function setName(string $name): void
@@ -76,8 +76,8 @@ class RecipeShort implements RecipeShortInterface
         $this->type = $type;
     }
 
-    public function setImageLink(?string $imageLink): void
+    public function setImageUrl(?string $imageUrl): void
     {
-        $this->imageLink = $imageLink;
+        $this->imageUrl = $imageUrl;
     }
 }

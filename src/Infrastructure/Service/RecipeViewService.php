@@ -88,7 +88,7 @@ class RecipeViewService implements RecipeView
             $this->recipeShort->setPrep($recipe->getPrep());
             $this->recipeShort->setCook($recipe->getCook());
             $this->recipeShort->setType($recipe->getType());
-            $this->recipeShort->setImageLink($recipe->getImageUrl());
+            $this->recipeShort->setImageUrl($recipe->getImageUrl());
             $recipeDto[] = $this->recipeShort;
         }
 
@@ -111,6 +111,7 @@ class RecipeViewService implements RecipeView
             $this->notFound->setMessage(
                 sprintf('No recipe associated with the entered id "%s"', $uuid)
             );
+            return $this->notFound;
         }
 
         $direction = $this->directionRepo->findOneByRecipeForDto($recipe);
@@ -122,7 +123,7 @@ class RecipeViewService implements RecipeView
         $this->recipeDto->setIngredient($ingredient);
         $this->recipeDto->setDirection($direction);
         $this->recipeDto->setType($recipe->getType());
-        $this->recipeDto->setImageLink($recipe->getImageUrl());
+        $this->recipeDto->setImageUrl($recipe->getImageUrl());
         $this->recipeDto->setImageSource($recipe->getImageSource());
         $this->recipeDto->setAuthor($recipe->getAuthor());
 
