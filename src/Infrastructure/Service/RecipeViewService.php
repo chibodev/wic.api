@@ -87,8 +87,8 @@ class RecipeViewService implements RecipeView
             $this->recipeShort->setUuid($recipe->getUuid());
             $this->recipeShort->setPrep($recipe->getPrep());
             $this->recipeShort->setCook($recipe->getCook());
-            $this->recipeShort->setType($recipe->getType()->getValue());
-            $this->recipeShort->setImageLink($recipe->getImageLink());
+            $this->recipeShort->setType($recipe->getType());
+            $this->recipeShort->setImageLink($recipe->getImageUrl());
             $recipeDto[] = $this->recipeShort;
         }
 
@@ -121,8 +121,8 @@ class RecipeViewService implements RecipeView
         $this->recipeDto->setCook($recipe->getCook());
         $this->recipeDto->setIngredient($ingredient);
         $this->recipeDto->setDirection($direction);
-        $this->recipeDto->setType($recipe->getType()->getValue());
-        $this->recipeDto->setImageLink($recipe->getImageLink());
+        $this->recipeDto->setType($recipe->getType());
+        $this->recipeDto->setImageLink($recipe->getImageUrl());
         $this->recipeDto->setImageSource($recipe->getImageSource());
         $this->recipeDto->setAuthor($recipe->getAuthor());
 
