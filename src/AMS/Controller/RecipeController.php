@@ -81,12 +81,4 @@ class RecipeController extends AbstractController
 
         return $this->render('Recipe/recipe.html.twig', ['data' => $params]);
     }
-
-    /**
-     * @Route("/recipe/add", name="add-recipe")
-     */
-    public function addAction(Request $request): Response
-    {
-        return $this->render('Recipe/add.html.twig');
-    }
 }
