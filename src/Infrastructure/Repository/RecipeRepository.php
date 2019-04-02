@@ -39,7 +39,7 @@ class RecipeRepository extends ServiceEntityRepository implements RecipeReposito
         $queryBuilder
             ->select('recipe')
             ->from(Recipe::class, 'recipe')
-            ->join(Ingredient::class, 'ingredient')
+            ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
             ->having('recipe.approved = 1')
         ;
 
