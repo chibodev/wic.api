@@ -95,7 +95,7 @@ class RecipeViewServiceTest extends TestCase
     {
         $mealContent = 'content';
 
-        $type = RecipeType::FOOD;
+        $type = new RecipeType(RecipeType::FOOD);
 
         $recipe = $this->prophesize(Recipe::class);
         $recipeShort = $this->prophesize(RecipeShort::class);
@@ -142,7 +142,7 @@ class RecipeViewServiceTest extends TestCase
 
         $this->expectException(RuntimeException::class);
 
-        $result = $this->subject->getRecipeByUuid($uuid);
+        $this->subject->getRecipeByUuid($uuid);
     }
 
     public function testGetRecipeByUuidFails(): void
@@ -160,7 +160,7 @@ class RecipeViewServiceTest extends TestCase
 
     public function testGetRecipeByUuidSucceeds(): void
     {
-        $type = RecipeType::BEVERAGE;
+        $type = new RecipeType(RecipeType::BEVERAGE);
         $uuid = 'fb09d733-be43-4ce3-a1df-e55796746738';
         $direction = $this->prophesize(DirectionInterface::class);
         $ingredient = $this->prophesize(IngredientInterface::class);
