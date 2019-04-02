@@ -2,13 +2,15 @@
 
 namespace App\Infrastructure\Entity;
 
+use App\EntityInterface\IngredientInterface;
+use App\EntityInterface\RecipeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\IngredientRepository")
  * @ORM\Table(indexes={@ORM\Index(name="description_idx", columns={"description"})})
  */
-class Ingredient
+class Ingredient implements IngredientInterface
 {
     /**
      * @ORM\Id()
@@ -18,6 +20,7 @@ class Ingredient
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=25, nullable=true)
      */
     private $description;
@@ -35,19 +38,12 @@ class Ingredient
     private $unit;
 
     /**
-     * @var Recipe
-     * @ORM\ManyToOne(targetEntity="App\Infrastructure\Entity\Recipe", inversedBy="ingredient")
+     * @var RecipeInterface
+     * @ORM\ManyToOne(targetEntity="App\EntityInterface\RecipeInterface", inversedBy="ingredient")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
 
-    public function __construct(Recipe $recipe, string $description, ?float $quantity, ?string $unit)
-    {
-        $this->description = $description;
-        $this->quantity = $quantity;
-        $this->unit = $unit;
-        $this->recipe = $recipe;
-    }
 
     public function getId(): ?int
     {
@@ -59,11 +55,9 @@ class Ingredient
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getQuantity(): ?float
@@ -86,8 +80,17 @@ class Ingredient
         $this->unit = $unit;
     }
 
-    public function getRecipe(): ?Recipe
+    public function setRecipe(RecipeInterface $recipe): void
+    {
+        $this->recipe = $recipe;
+    }
+
+    public function getRecipe(): ?RecipeInterface
     {
         return $this->recipe;
+    }
+
+    public function __toString() {
+        return sprintf('Id #%d: %s %s%s',$this->getId(), $this->getDescription(), $this->getQuantity(), $this->unit);
     }
 }

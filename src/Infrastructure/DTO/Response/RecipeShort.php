@@ -14,12 +14,14 @@ class RecipeShort implements RecipeShortInterface
     private $prep;
     /** @var int|null */
     private $cook;
+    /** @var bool */
+    private $keto;
     /** @var string */
     private $uuid;
     /** @var string */
     private $type;
     /** @var string|null */
-    private $imageLink;
+    private $imageUrl;
 
     public function getName(): string
     {
@@ -46,9 +48,9 @@ class RecipeShort implements RecipeShortInterface
         return $this->type;
     }
 
-    public function getImageLink(): ?string
+    public function getImageUrl(): ?string
     {
-        return $this->imageLink;
+        return $this->imageUrl;
     }
 
     public function setName(string $name): void
@@ -76,8 +78,18 @@ class RecipeShort implements RecipeShortInterface
         $this->type = $type;
     }
 
-    public function setImageLink(?string $imageLink): void
+    public function setImageUrl(?string $imageUrl): void
     {
-        $this->imageLink = $imageLink;
+        $this->imageUrl = $imageUrl;
+    }
+
+    public function isKeto(): bool
+    {
+        return $this->keto;
+    }
+
+    public function setKeto(bool $keto): void
+    {
+        $this->keto = $keto;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Entity;
 
-use DateTimeImmutable;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -26,7 +26,7 @@ class Unknown
     private $term;
 
     /**
-     * @var DateTimeImmutable
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -43,16 +43,22 @@ class Unknown
     public function __construct(string $term)
     {
         $this->term = $term;
-        $this->createdAt = new DateTimeImmutable();
+        $this->createdAt = new DateTime();
         $this->counter = 1;
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
 
     public function getTerm(): string
     {
         return $this->term;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }

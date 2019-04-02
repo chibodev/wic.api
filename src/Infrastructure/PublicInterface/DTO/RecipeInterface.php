@@ -26,11 +26,11 @@ interface RecipeInterface
 
     public function getType(): string;
 
-    public function getImageLink(): ?string;
+    public function getImageUrl(): ?string;
 
     public function getImageSource(): ?string;
 
-    public function setName(string $name): void;
+    public function setName(?string $name): void;
 
     public function setPrep(?int $prep): void;
 
@@ -44,7 +44,11 @@ interface RecipeInterface
 
     public function setType(string $type): void;
 
-    public function setImageLink(?string $imageLink): void;
+    public function setImageUrl(?string $imageLink): void;
 
     public function setImageSource(?string $imageSource): void;
+
+    public function isKeto(): bool;
+
+    public function setKeto(bool $keto): void;
 }

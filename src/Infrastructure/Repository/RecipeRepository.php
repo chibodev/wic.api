@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
+use App\EntityInterface\RecipeInterface;
 use App\Infrastructure\Entity\Ingredient;
 use App\Infrastructure\Entity\Recipe;
 use App\Infrastructure\PublicInterface\RecipeRepositoryInterface;
@@ -14,10 +15,10 @@ use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Recipe|null find($id, $lockMode = null, $lockVersion = null)
- * @method Recipe|null findOneBy(array $criteria, array $orderBy = null)
- * @method Recipe[]    findAll()
- * @method Recipe[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RecipeInterface|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RecipeInterface|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RecipeInterface[]    findAll()
+ * @method RecipeInterface[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RecipeRepository extends ServiceEntityRepository implements RecipeRepositoryInterface
 {
@@ -38,11 +39,13 @@ class RecipeRepository extends ServiceEntityRepository implements RecipeReposito
         $queryBuilder
             ->select('recipe')
             ->from(Recipe::class, 'recipe')
-            ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
+            ->join(Ingredient::class, 'ingredient')
+            ->having('recipe.approved = 1')
         ;
 
         foreach ($mealContents as $index => $mealContent) {
-            $queryBuilder->orWhere("recipe.name LIKE :mealContent$index ESCAPE '!'");
+            $queryBuilder->orWhere("recipe.name LIKE :mealContent$index");
+            $queryBuilder->orWhere("ingredient.description LIKE :mealContent$index");
             $queryBuilder->setParameter("mealContent$index", $this->makeLikeParam($mealContent));
         }
 

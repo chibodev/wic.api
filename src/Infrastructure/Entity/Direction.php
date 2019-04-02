@@ -2,12 +2,14 @@
 
 namespace App\Infrastructure\Entity;
 
+use App\EntityInterface\DirectionInterface;
+use App\EntityInterface\RecipeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\DirectionRepository")
  */
-class Direction
+class Direction implements DirectionInterface
 {
     /**
      * @ORM\Id()
@@ -17,29 +19,25 @@ class Direction
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
-     * @var Recipe
-     * @ORM\ManyToOne(targetEntity="App\Infrastructure\Entity\Recipe", inversedBy="direction")
+     * @var RecipeInterface
+     * @ORM\ManyToOne(targetEntity="App\EntityInterface\RecipeInterface", inversedBy="direction")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
 
-    public function __construct(string $description, Recipe $recipe)
-    {
-        $this->description = $description;
-        $this->recipe = $recipe;
-    }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -49,8 +47,18 @@ class Direction
         $this->description = $description;
     }
 
-    public function getRecipe(): Recipe
+    public function setRecipe(RecipeInterface $recipe): void
+    {
+        $this->recipe = $recipe;
+    }
+
+    public function getRecipe(): ?RecipeInterface
     {
         return $this->recipe;
+    }
+
+    public function __toString()
+    {
+        return sprintf('Id #%d: %s',$this->getId(), $this->getDescription());
     }
 }

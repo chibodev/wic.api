@@ -22,7 +22,6 @@ class Builder
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         $menu->addChild('Recipe', ['route' => 'recipe']);
-        $menu->addChild('Add Recipe', ['route' => 'add-recipe']);
 
         // menu items
         foreach ($menu as $child) {

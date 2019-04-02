@@ -27,6 +27,10 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        resolve_target_entities:
+            App\EntityInterface\RecipeInterface: App\Infrastructure\Entity\Recipe
+            App\EntityInterface\DirectionInterface: App\Infrastructure\Entity\Direction
+            App\EntityInterface\IngredientInterface: App\Infrastructure\Entity\Ingredient
         mappings:
             App\Infrastructure\Entity\Recipe:
                 is_bundle: false
