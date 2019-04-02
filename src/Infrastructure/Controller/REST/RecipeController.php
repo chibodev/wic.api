@@ -5,36 +5,24 @@ declare(strict_types=1);
 namespace App\Infrastructure\Controller\REST;
 
 use App\Infrastructure\DTO\Request\MealContent;
-use App\Infrastructure\DTO\Response\RecipeShort;
+use App\Infrastructure\DTO\Response\NotFound;
 use App\Infrastructure\DTO\Response\Recipe;
+use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\PublicInterface\RecipeView;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Swagger\Annotations as SWG;
 
 /**
  * @Route("api")
  */
 class RecipeController extends AbstractFOSRestController
 {
-
-    /*
-     * Route Options
-     * PUBLIC
-     * 1 - get recipe by id (uuid)
-     * 2 - get recipes based on search term (ingredient and recipe)
-     *
-     * PRIVATE - control using aop
-     * 1 - get all recipes
-     * 2 - add new recipe
-     * 3 - edit existing recipe
-     *
-     */
     private $recipeView;
 
     public function __construct(RecipeView $recipeView)
@@ -53,7 +41,14 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=Recipe::class)
      *     )
      * )
-     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid data supplied",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=NotFound::class)
+     *     )
+     * )
      * @SWG\Parameter(
      *     name="uuid",
      *     in="path",
@@ -67,8 +62,9 @@ class RecipeController extends AbstractFOSRestController
     public function getRecipeAction(string $uuid): Response
     {
         $recipe = $this->recipeView->getRecipeByUuid($uuid);
+        $responseCode = $recipe instanceof NotFound ? Response::HTTP_BAD_REQUEST : Response::HTTP_OK;
 
-        return $this->handleView(View::create($recipe, Response::HTTP_OK));
+        return $this->handleView(View::create($recipe, $responseCode));
     }
 
     /**
@@ -76,10 +72,18 @@ class RecipeController extends AbstractFOSRestController
      *
      * @SWG\Response(
      *     response=200,
-     *     description="The endpoint for getting recipes off a specific search term",
+     *     description="Successful retrieval of recipes off a specific search term",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=RecipeShort::class)
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="No recipe found for search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=NotFound::class)
      *     )
      * )
      * @SWG\Parameter(
@@ -99,7 +103,9 @@ class RecipeController extends AbstractFOSRestController
     {
         $recipe = $this->recipeView->getRecipeByMealContent($content->getMealContent());
 
-        return $this->handleView(View::create($recipe), Response::HTTP_OK);
+        $responseCode = $recipe instanceof NotFound ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
+
+        return $this->handleView(View::create($recipe, $responseCode));
     }
 
 }

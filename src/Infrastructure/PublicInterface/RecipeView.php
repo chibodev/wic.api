@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\PublicInterface;
 
-use App\Infrastructure\DTO\Response\NotFound;
-use App\Infrastructure\DTO\Response\Recipe;
-use App\Infrastructure\DTO\Response\RecipeShort;
+use App\Infrastructure\PublicInterface\DTO\NotFoundInterface;
+use App\Infrastructure\PublicInterface\DTO\RecipeInterface;
+use App\Infrastructure\PublicInterface\DTO\RecipeShortInterface;
 use Exception;
 
 interface RecipeView
 {
     /**
-     * @return RecipeShort|NotFound
+     * @return RecipeShortInterface|NotFoundInterface
      * @throws Exception
      */
     public function getRecipeByMealContent(string $mealContent);
 
     /**
-     * @return Recipe|NotFound
+     * @return RecipeInterface|NotFoundInterface
      * @throws Exception
      */
     public function getRecipeByUuid(string $uuid);
