@@ -16,6 +16,8 @@ class Recipe implements RecipeInterface
     private $cook;
     /** @var string */
     private $author;
+    /** @var bool */
+    private $keto;
     /** @var Ingredient[] */
     private $ingredient;
     /** @var Direction[] */
@@ -119,5 +121,15 @@ class Recipe implements RecipeInterface
     public function setImageSource(?string $imageSource): void
     {
         $this->imageSource = $imageSource;
+    }
+
+    public function isKeto(): bool
+    {
+        return $this->keto;
+    }
+
+    public function setKeto(bool $keto): void
+    {
+        $this->keto = $keto;
     }
 }

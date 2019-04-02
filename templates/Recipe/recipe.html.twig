@@ -17,10 +17,13 @@
                 <small>by: {{ data.recipe.author|capitalize|e }}</small>
                 <span class="breadcrumb"> Preparation: {{ data.recipe.prep|e }} min</span>
                 <span class="breadcrumb"> Cooking: {{ data.recipe.cook|e }} min</span>
+                <span class="breadcrumb"> Keto: {{ data.recipe.keto ? 'Yes' : 'No'}}</span>
             </div>
-            <div class="col-md-5">
-                <img src="{{ data.recipe.imageUrl }}" class="rounded float-left img-thumbnail" alt="{{ data.recipe.name|lower }}">
-            </div>
+            {% if(data.recipe.imageUrl) %}
+                <div class="col-md-5">
+                    <img src="{{ data.recipe.imageUrl }}" class="rounded float-left img-thumbnail" alt="{{ data.recipe.name|lower }}">
+                </div>
+            {% endif %}
         </div>
         <table class="table">
             <tbody>

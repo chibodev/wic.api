@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Infrastructure\Service;
 
 use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
+use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\Entity\Unknown;
 use App\Infrastructure\PublicInterface\DirectionRepositoryInterface;
 use App\Infrastructure\PublicInterface\DTO\NotFoundInterface;
 use App\Infrastructure\PublicInterface\DTO\RecipeInterface;
-use App\Infrastructure\PublicInterface\DTO\RecipeShortInterface;
 use App\Infrastructure\PublicInterface\IngredientRepositoryInterface;
 use App\Infrastructure\PublicInterface\RecipeRepositoryInterface;
 use App\Infrastructure\PublicInterface\RecipeView;
 use App\Infrastructure\Repository\UnknownRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Validator\Constraints\Uuid as UuidConstraint;
 use Symfony\Component\Validator\Validation;
 
@@ -34,7 +35,6 @@ class RecipeViewService implements RecipeView
         self::IS
     ];
     private $notFound;
-    private $recipeShort;
     private $recipeDto;
 
     public function __construct(
@@ -43,7 +43,6 @@ class RecipeViewService implements RecipeView
         IngredientRepositoryInterface $ingredientRepo,
         DirectionRepositoryInterface $directionRepo,
         NotFoundInterface $notFound,
-        RecipeShortInterface $recipeShort,
         RecipeInterface $recipeDto,
         LoggerInterface $logger
     ) {
@@ -53,7 +52,6 @@ class RecipeViewService implements RecipeView
         $this->directionRepo = $directionRepo;
         $this->logger = $logger;
         $this->notFound = $notFound;
-        $this->recipeShort = $recipeShort;
         $this->recipeDto = $recipeDto;
     }
 
@@ -83,13 +81,15 @@ class RecipeViewService implements RecipeView
 
         /** @var RecipeEntityInterface $recipe */
         foreach ($recipes as $recipe){
-            $this->recipeShort->setName($recipe->getName());
-            $this->recipeShort->setUuid($recipe->getUuid());
-            $this->recipeShort->setPrep($recipe->getPrep());
-            $this->recipeShort->setCook($recipe->getCook());
-            $this->recipeShort->setType($recipe->getType());
-            $this->recipeShort->setImageUrl($recipe->getImageUrl());
-            $recipeDto[] = $this->recipeShort;
+            $recipeShort = new RecipeShort();
+            $recipeShort->setName($recipe->getName());
+            $recipeShort->setUuid($recipe->getUuid());
+            $recipeShort->setPrep($recipe->getPrep());
+            $recipeShort->setCook($recipe->getCook());
+            $recipeShort->setType($recipe->getType());
+            $recipeShort->setImageUrl($recipe->getImageUrl());
+            $recipeShort->setKeto($recipe->isKeto());
+            $recipeDto[] = $recipeShort;
         }
 
         return $recipeDto;
@@ -99,10 +99,7 @@ class RecipeViewService implements RecipeView
     {
         if (!$this->isUuidValid($uuid)){
             $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
-            $this->notFound->setMessage(
-                sprintf('The parameter "%s" is invalid', $uuid)
-            );
-            return $this->notFound;
+            throw new RuntimeException(sprintf('invalid uuid entered: %s', $uuid));
         }
 
         $recipe = $this->recipeRepo->findOneBy(['uuid' => $uuid]);
@@ -126,6 +123,7 @@ class RecipeViewService implements RecipeView
         $this->recipeDto->setImageUrl($recipe->getImageUrl());
         $this->recipeDto->setImageSource($recipe->getImageSource());
         $this->recipeDto->setAuthor($recipe->getAuthor());
+        $this->recipeDto->setKeto($recipe->isKeto());
 
         return $this->recipeDto;
     }

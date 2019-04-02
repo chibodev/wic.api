@@ -114,6 +114,12 @@ class Recipe implements RecipeInterface
     private $approved = 0;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $keto = 0;
+
+    /**
      * @throws Exception
      */
     public function __construct() {
@@ -229,9 +235,14 @@ class Recipe implements RecipeInterface
         return $this->imageSource;
     }
 
-    public function __toString(): string
+    public function isKeto(): bool
     {
-        return sprintf('Recipe #%d: %s',$this->getId(), $this->getName());
+        return $this->keto;
+    }
+
+    public function setKeto(bool $keto): void
+    {
+        $this->keto = $keto;
     }
 
     public function isApproved(): bool
@@ -242,5 +253,10 @@ class Recipe implements RecipeInterface
     public function setApproved(bool $approved): void
     {
         $this->approved = $approved;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('Recipe #%d: %s',$this->getId(), $this->getName());
     }
 }

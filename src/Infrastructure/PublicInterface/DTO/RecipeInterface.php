@@ -47,4 +47,8 @@ interface RecipeInterface
     public function setImageUrl(?string $imageLink): void;
 
     public function setImageSource(?string $imageSource): void;
+
+    public function isKeto(): bool;
+
+    public function setKeto(bool $keto): void;
 }
