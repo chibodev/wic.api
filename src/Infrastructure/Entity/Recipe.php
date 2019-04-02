@@ -8,6 +8,7 @@ use App\EntityInterface\RecipeInterface;
 use App\Infrastructure\ValueObject\RecipeType;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Ramsey\Uuid\Uuid;
@@ -69,13 +70,13 @@ class Recipe implements RecipeInterface
     private $createdAt;
 
     /**
-     * @var IngredientInterface|null
+     * @var IngredientInterface|Collection
      * @ORM\OneToMany(targetEntity="App\EntityInterface\IngredientInterface", mappedBy="recipe")
      */
     private $ingredient;
 
     /**
-     * @var DirectionInterface|null
+     * @var DirectionInterface|Collection
      * @ORM\OneToMany(targetEntity="App\EntityInterface\DirectionInterface", mappedBy="recipe")
      */
     private $direction;
@@ -155,7 +156,7 @@ class Recipe implements RecipeInterface
         $this->ingredient = $ingredient;
     }
 
-    public function getIngredient(): ?IngredientInterface
+    public function getIngredient()
     {
         return $this->ingredient;
     }
@@ -185,7 +186,7 @@ class Recipe implements RecipeInterface
         $this->cook = $cook;
     }
 
-    public function getDirection(): ?DirectionInterface
+    public function getDirection()
     {
         return $this->direction;
     }

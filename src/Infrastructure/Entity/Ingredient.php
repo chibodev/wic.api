@@ -91,6 +91,6 @@ class Ingredient implements IngredientInterface
     }
 
     public function __toString() {
-        return (string)$this->getId();
+        return sprintf('Id #%d: %s %s%s',$this->getId(), $this->getDescription(), $this->getQuantity(), $this->unit);
     }
 }

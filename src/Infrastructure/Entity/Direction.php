@@ -57,8 +57,8 @@ class Direction implements DirectionInterface
         return $this->recipe;
     }
 
-    public function __toString() {
-
-        return (string)$this->getId();
+    public function __toString()
+    {
+        return sprintf('Id #%d: %s',$this->getId(), $this->getDescription());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EntityInterface;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 
 interface RecipeInterface
 {
@@ -16,7 +17,8 @@ interface RecipeInterface
 
     public function setIngredient(?IngredientInterface $ingredient): void;
 
-    public function getIngredient(): ?IngredientInterface;
+    /** @return IngredientInterface|Collection */
+    public function getIngredient();
 
     public function getPrep(): ?int;
 
@@ -28,7 +30,8 @@ interface RecipeInterface
 
     public function setCook(int $cook): void;
 
-    public function getDirection(): ?DirectionInterface;
+    /** @return DirectionInterface|Collection */
+    public function getDirection();
 
     public function setDirection(DirectionInterface $direction): void;
 
