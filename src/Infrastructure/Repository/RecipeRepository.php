@@ -39,12 +39,13 @@ class RecipeRepository extends ServiceEntityRepository implements RecipeReposito
         $queryBuilder
             ->select('recipe')
             ->from(Recipe::class, 'recipe')
-            ->innerJoin(Ingredient::class, 'ingredient', Join::WITH, 'ingredient.recipe = recipe')
+            ->join(Ingredient::class, 'ingredient')
             ->having('recipe.approved = 1')
         ;
 
         foreach ($mealContents as $index => $mealContent) {
-            $queryBuilder->orWhere("recipe.name LIKE :mealContent$index ESCAPE '!'");
+            $queryBuilder->orWhere("recipe.name LIKE :mealContent$index");
+            $queryBuilder->orWhere("ingredient.description LIKE :mealContent$index");
             $queryBuilder->setParameter("mealContent$index", $this->makeLikeParam($mealContent));
         }
 
