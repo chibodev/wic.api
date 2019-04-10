@@ -31,17 +31,19 @@ class ApiKeyGeneratorCommand extends Command
     /**
      * @throws InvalidArgumentException
      */
-    protected function configure()
+    protected function configure(): void
     {
+
         $this->setName('api:create:key')
             ->setDescription('Generates an api key.')
             ->addOption(
                 'role',
                 null,
-                InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_REQUIRED,
                 sprintf('Role of user defaults to %s', ApiUserRole::ROLE_API_USER),
                 ApiUserRole::ROLE_API_USER
-            );
+            )
+        ;
     }
     /**
      * @throws Exception
@@ -52,7 +54,7 @@ class ApiKeyGeneratorCommand extends Command
         $username = 'wic_api_user-'.$uuid->toString();
 
         try {
-            $role = new ApiUserRole($input->getArgument('Role'));
+            $role = new ApiUserRole($input->getOption('role'));
         } catch (InvalidArgumentException | UnexpectedValueException $e) {
             throw new RuntimeException('The entered role is invalid');
         }
