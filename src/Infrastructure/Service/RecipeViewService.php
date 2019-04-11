@@ -97,6 +97,14 @@ class RecipeViewService implements RecipeView
 
     public function getRecipeByUuid(string $uuid)
     {
+        /**
+         * Todo: Change to events
+         * Events
+         * 1. Validate based on api key
+         * 2. Repo call to find by meal content and return
+         * 3. If not successful then save into unknown
+         */
+
         if (!$this->isUuidValid($uuid)){
             $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
             throw new RuntimeException(sprintf('invalid uuid entered: %s', $uuid));
@@ -131,9 +139,9 @@ class RecipeViewService implements RecipeView
     private function formatString(string $toBeFormatted): array
     {
         $toBeFormatted = strtolower(preg_replace('/[^A-Za-z]\s+/', ' ', $toBeFormatted));    //remove special char + multiple whitespaces
-        $toBeFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
+        $replacedFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
 
-        return str_word_count($toBeFormatted, 1);
+        return str_word_count($replacedFormatted, 1);
     }
 
     /**
