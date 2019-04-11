@@ -21,4 +21,9 @@ interface ApiUser
      * @throws Exception
      */
     public function save(ApiUserEntity $apiUser);
+
+    /**
+     * @throws Exception
+     */
+    public function verifyAccess(string $apiKey): bool;
 }
