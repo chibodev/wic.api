@@ -9,12 +9,14 @@ use App\Infrastructure\DTO\Response\NotFound;
 use App\Infrastructure\DTO\Response\Recipe;
 use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\PublicInterface\RecipeView;
+use App\Infrastructure\Security\ApiUser;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,10 +26,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecipeController extends AbstractFOSRestController
 {
     private $recipeView;
+    private $apiUserService;
 
-    public function __construct(RecipeView $recipeView)
+    public function __construct(RecipeView $recipeView, ApiUser $apiUserService)
     {
         $this->recipeView = $recipeView;
+        $this->apiUserService = $apiUserService;
     }
 
     /**
@@ -96,11 +100,21 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=MealContent::class)
      *     )
      * )
+     * @SWG\Parameter(
+     *     name="X-API",
+     *     in="header",
+     *     type="string",
+     *     description="The api key",
+     * )
      * @ParamConverter("content", converter="fos_rest.request_body")
      * @throws Exception
      */
-    public function recipeSearchAction(MealContent $content): Response
+    public function recipeSearchAction(MealContent $content, Request $request): Response
     {
+        if (!$this->apiUserService->verifyAccess($request->headers->get('X-API'))) {
+            return $this->handleView(View::create(null, Response::HTTP_UNAUTHORIZED));
+        }
+
         $recipe = $this->recipeView->getRecipeByMealContent($content->getMealContent());
 
         $responseCode = $recipe instanceof NotFound ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
