@@ -21,14 +21,4 @@ class AccessKeyService implements AccessKey
 
         return new AccessKeyDTO($hash, $apiKey);
     }
-
-    /*
-    public function verifyAccess(string $value): bool
-    {
-        $decodedApiKey = base64_decode($value, true);
-        $decodedApiKey = explode($decodedApiKey, '.');
-
-        return password_verify($decodedApiKey[0], $value);
-    }
-    */
 }
