@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Security;
 
-use App\Common\App\Security\DTO\AccessKey;
+use App\Common\Security\DTO\AccessKey;
 use App\Infrastructure\Entity\ApiUser as ApiUserEntity;
 use Exception;
 

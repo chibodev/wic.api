@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Common\App\Security\DTO;
+namespace App\Common\Security\DTO;
 
 class AccessKey
 {

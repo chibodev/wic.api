@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Common\App\Security\Service;
+namespace App\Common\Security\Service;
 
-use App\Common\App\Security\DTO\AccessKey as AccessKeyDTO;
+use App\Common\Security\DTO\AccessKey as AccessKeyDTO;
 use Exception;
 
 class AccessKeyService implements AccessKey
