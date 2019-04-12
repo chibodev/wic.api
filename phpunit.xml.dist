@@ -14,14 +14,32 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="unit">
+            <directory>src/*/Tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>src/*/Tests/Functional/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
             <directory>src</directory>
+            <exclude>
+                <directory>src/*/Controller/</directory>
+                <directory>src/*/Form/</directory>
+                <directory>src/*/Menu/</directory>
+                <directory>src/*/*/DTO/</directory>
+                <directory>src/EntityInterface/</directory>
+                <directory>src/*/Command/</directory>
+                <directory>src/*/DTO/</directory>
+                <directory>src/*/Entity/</directory>
+                <directory>src/*/PublicInterface/</directory>
+                <directory>src/*/Repository/</directory>
+                <directory>src/*/ValueObject/</directory>
+                <directory>src/*/Tests/</directory>
+                <directory>src/Migration/</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
