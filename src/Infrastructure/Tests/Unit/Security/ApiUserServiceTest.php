@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class ApiUserServiceTest extends TestCase
 {
@@ -44,8 +45,6 @@ class ApiUserServiceTest extends TestCase
         $this->accessKey->generateForApi($userUuid)->shouldBeCalled()->willReturn($accessKey->reveal());
 
         $result = $this->subject->createKey($userUuid);
-
-        var_dump($result->getHash(), $result->getApiKey());
 
         self::assertEquals('apiKey', $result->getApiKey());
         self::assertEquals('hash', $result->getHash());
@@ -86,11 +85,13 @@ class ApiUserServiceTest extends TestCase
 
         $apiUser->getHash()->willReturn('fakeHash');
         $apiUser->getUuid()->willReturn('fakeUuid');
+        $apiUser->getRoles()->willReturn(['role' => 'fakeRole']);
 
         $this->repository->findOneBy(Argument::any())->shouldBeCalled()->willReturn($apiUser->reveal());
 
-        self::assertFalse($this->subject->verifyAccess($apiKey));
+        $this->expectException(UsernameNotFoundException::class);
 
+        $this->subject->verifyAccess($apiKey);
     }
 
     public function testVerifyAccessSuccessful(): void
@@ -100,10 +101,15 @@ class ApiUserServiceTest extends TestCase
 
         $apiUser->getHash()->shouldBeCalled()->willReturn('$2y$10$9CpprU7cxg1lHga/fVoqneLdBsVqyyVl/e7xMIBf77SpXJSTQGCpy');
         $apiUser->getUuid()->shouldBeCalled()->willReturn('wic_api_user-22efc88b-ae44-4d94-b801-b712b8f5b227');
+        $apiUser->getRoles()->shouldBeCalled()->willReturn(['role' => 'API_USER_ROLE']);
 
         $this->repository->findOneBy(Argument::any())->shouldBeCalled()->willReturn($apiUser->reveal());
 
-        self::assertTrue($this->subject->verifyAccess($apiKey));
+        $result = $this->subject->verifyAccess($apiKey);
+
+        self::assertSame('wic_api_user-22efc88b-ae44-4d94-b801-b712b8f5b227', $result->getUsername());
+        self::assertSame('$2y$10$9CpprU7cxg1lHga/fVoqneLdBsVqyyVl/e7xMIBf77SpXJSTQGCpy', $result->getPassword());
+        self::assertSame(['role' => 'API_USER_ROLE'], $result->getRoles());
 
     }
 }
