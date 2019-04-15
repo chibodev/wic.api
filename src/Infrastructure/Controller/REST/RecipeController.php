@@ -9,14 +9,12 @@ use App\Infrastructure\DTO\Response\NotFound;
 use App\Infrastructure\DTO\Response\Recipe;
 use App\Infrastructure\DTO\Response\RecipeShort;
 use App\Infrastructure\PublicInterface\RecipeView;
-use App\Infrastructure\Security\ApiUser;
 use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Swagger\Annotations as SWG;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,17 +24,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecipeController extends AbstractFOSRestController
 {
     private $recipeView;
-    private $apiUserService;
 
-    public function __construct(RecipeView $recipeView, ApiUser $apiUserService)
+    public function __construct(RecipeView $recipeView)
     {
         $this->recipeView = $recipeView;
-        $this->apiUserService = $apiUserService;
     }
 
     /**
      * @Route(path="/get/recipe/{uuid}", methods={"GET"})
      *
+     * @SWG\Parameter(
+     *     name="X-AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="The api key",
+     * )
+     * @SWG\Parameter(
+     *     name="uuid",
+     *     in="path",
+     *     type="string",
+     *     description="The recipe uuid",
+     *     default="f88808ca-310d-40d8-8042-2628af9fbf06"
+     * )
      * @SWG\Response(
      *     response=200,
      *     description="The endpoint for getting recipes off a specific search term",
@@ -53,12 +62,13 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=NotFound::class)
      *     )
      * )
-     * @SWG\Parameter(
-     *     name="uuid",
-     *     in="path",
-     *     type="string",
-     *     description="The recipe uuid",
-     *     default="f88808ca-310d-40d8-8042-2628af9fbf06"
+     * @SWG\Response(
+     *     response=401,
+     *     description="Authentication header required",
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="Access unauthorized",
      * )
      *
      * @throws Exception
@@ -74,21 +84,11 @@ class RecipeController extends AbstractFOSRestController
     /**
      * @Route(path="/get/recipe", methods={"POST"})
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Successful retrieval of recipes off a specific search term",
-     *     @SWG\Schema(
-     *         type="object",
-     *         ref=@Model(type=RecipeShort::class)
-     *     )
-     * )
-     * @SWG\Response(
-     *     response=404,
-     *     description="No recipe found for search term",
-     *     @SWG\Schema(
-     *         type="object",
-     *         ref=@Model(type=NotFound::class)
-     *     )
+     * @SWG\Parameter(
+     *     name="X-AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="The api key",
      * )
      * @SWG\Parameter(
      *     name="body",
@@ -100,26 +100,40 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=MealContent::class)
      *     )
      * )
-     * @SWG\Parameter(
-     *     name="X-API",
-     *     in="header",
-     *     type="string",
-     *     description="The api key",
+     * @SWG\Response(
+     *     response=200,
+     *     description="Successful retrieval of recipes off a specific search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=RecipeShort::class)
+     *     )
      * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="Authentication header required",
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="Access unauthorized",
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="No recipe found for search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=NotFound::class)
+     *     )
+     * )
+     *
      * @ParamConverter("content", converter="fos_rest.request_body")
      * @throws Exception
      */
-    public function recipeSearchAction(MealContent $content, Request $request): Response
+    public function recipeSearchAction(MealContent $content): Response
     {
-        if (!$this->apiUserService->verifyAccess($request->headers->get('X-API'))) {
-            return $this->handleView(View::create(null, Response::HTTP_UNAUTHORIZED));
-        }
-
         $recipe = $this->recipeView->getRecipeByMealContent($content->getMealContent());
 
         $responseCode = $recipe instanceof NotFound ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
         return $this->handleView(View::create($recipe, $responseCode));
     }
-
 }
