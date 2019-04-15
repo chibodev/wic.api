@@ -7,6 +7,7 @@ namespace App\Infrastructure\Security;
 use App\Common\Security\DTO\AccessKey;
 use App\Infrastructure\Entity\ApiUser as ApiUserEntity;
 use Exception;
+use Symfony\Component\Security\Core\User\User;
 
 interface ApiUser
 {
@@ -25,5 +26,5 @@ interface ApiUser
     /**
      * @throws Exception
      */
-    public function verifyAccess(string $apiKey): bool;
+    public function verifyAccess(string $apiKey): User;
 }

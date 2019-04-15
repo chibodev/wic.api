@@ -10,6 +10,9 @@ use App\Infrastructure\Entity\ApiUser as ApiUserEntity;
 use App\Infrastructure\Repository\ApiUserRepository;
 use Exception;
 use InvalidArgumentException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\User;
 
 class ApiUserService implements ApiUser
 {
@@ -32,17 +35,22 @@ class ApiUserService implements ApiUser
         $this->repository->save($apiUser);
     }
 
-    public function verifyAccess(string $apiKey): bool
+    public function verifyAccess(string $apiKey): User
     {
-        list($uuid, $hash) = $this->validate($apiKey);
+        [$uuid, $hash] = $this->validate($apiKey);
 
         $apiUser = $this->repository->findOneBy(['uuid' => $uuid]);
 
         if (!$apiUser) {
-            throw new Exception('Access forbidden! Invalid user');
+            throw new AuthenticationException('Access forbidden! Invalid user');
         }
 
-        return hash_equals($hash, $apiUser->getHash()) && password_verify($apiUser->getUuid(), $hash);
+        $authentication = hash_equals($hash, $apiUser->getHash()) && password_verify($apiUser->getUuid(), $hash);
+        if (!$authentication) {
+            throw new UsernameNotFoundException('Access forbidden!. No user exists for the enter token');
+        }
+
+        return new User($apiUser->getUuid(), $apiUser->getHash(), $apiUser->getRoles());
     }
 
     /**
