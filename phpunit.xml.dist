@@ -39,6 +39,7 @@
                 <directory>src/*/ValueObject/</directory>
                 <directory>src/*/Tests/</directory>
                 <directory>src/Migration/</directory>
+                <file>src/Common/Security/TokenAuthenticator.php</file>
             </exclude>
         </whitelist>
     </filter>
