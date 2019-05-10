@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\AMS\Menu;
 
+use InvalidArgumentException;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,11 +18,15 @@ class Builder
         $this->factory = $factory;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function mainMenu(RequestStack $requestStack): ItemInterface
     {
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         $menu->addChild('Recipe', ['route' => 'recipe']);
+        $menu->addChild('Admin', ['route' => 'easyadmin']);
 
         // menu items
         foreach ($menu as $child) {

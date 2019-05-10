@@ -1,19 +1,26 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        #in_memory: { memory: ~ }
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: ~
-            logout: ~
+            anonymous: true
+            logout: true
 
             guard:
                 authenticators:
                     - App\Common\Security\TokenAuthenticator
+                    - App\AMS\Security\AdminFormAuthenticator
+                entry_point: App\AMS\Security\AdminFormAuthenticator
 
             # activate different ways to authenticate
 
@@ -26,7 +33,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-#        - { path: ^/admin, roles: ROLE_API_ADMIN }
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_API_ADMIN }
         - { path: ^/api/get/, roles: ROLE_API_USER }
 
     role_hierarchy:

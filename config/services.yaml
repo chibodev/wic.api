@@ -25,16 +25,16 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    #========== Infrastructure ==========#
+    #========== Recipe ==========#
 
-    App\Infrastructure\:
-        resource: '../src/Infrastructure/*'
-        exclude:  '../src/Infrastructure/{Entity,DTO,Tests,Controller}'
+    App\Recipe\:
+        resource: '../src/Recipe/*'
+        exclude:  '../src/Recipe/{Entity,DTO,Tests,Controller}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Infrastructure\Controller\:
-        resource: '../src/Infrastructure/Controller'
+    App\Recipe\Controller\:
+        resource: '../src/Recipe/Controller'
         tags: ['controller.service_arguments']
 
     #========== AMS ==========#

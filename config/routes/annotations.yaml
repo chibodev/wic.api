@@ -2,6 +2,6 @@ ams:
     resource: ../../src/AMS/Controller/
     type: annotation
 
-infrastructure:
-    resource: ../../src/Infrastructure/Controller/
+recipe:
+    resource: ../../src/Recipe/Controller/
     type: annotation
