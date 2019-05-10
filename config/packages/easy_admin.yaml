@@ -11,7 +11,7 @@ easy_admin:
     Administrator:
       class: App\AMS\Entity\Administrator
     Recipe:
-      class: App\Infrastructure\Entity\Recipe
+      class: App\Recipe\Entity\Recipe
       list:
         fields: ['id', 'uuid', 'name', 'type', 'author', 'prep', 'cook', { property: 'keto', type: 'toggle' },
                  { property: 'imageUrl', type: 'url' }, 'imageSource', { property: 'approved', type: 'toggle' }, { property: 'createdAt', format: 'Y-m-d' }]
@@ -22,10 +22,10 @@ easy_admin:
                  'prep', 'cook', { property: 'imageUrl', type: 'url' }, 'imageSource']
 
     Ingredient:
-      class: App\Infrastructure\Entity\Ingredient
+      class: App\Recipe\Entity\Ingredient
     Direction:
-      class: App\Infrastructure\Entity\Direction
+      class: App\Recipe\Entity\Direction
       list:
         fields: ['id', 'description', 'recipe']
     Unknown:
-      class: App\Infrastructure\Entity\Unknown
+      class: App\Recipe\Entity\Unknown

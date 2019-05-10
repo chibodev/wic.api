@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Security;
 
-use App\Infrastructure\Security\ApiUser;
+use App\Recipe\Security\ApiUser;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

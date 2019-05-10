@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\AMS\Controller;
 
 use App\AMS\Form\MealContentType;
-use App\Infrastructure\PublicInterface\DTO\MealContentInterface as MealContentRequestDTO;
-use App\Infrastructure\PublicInterface\DTO\NotFoundInterface as NotFoundResponseDTO;
-use App\Infrastructure\PublicInterface\RecipeView;
+use App\Recipe\PublicInterface\DTO\MealContentInterface as MealContentRequestDTO;
+use App\Recipe\PublicInterface\DTO\NotFoundInterface as NotFoundResponseDTO;
+use App\Recipe\PublicInterface\RecipeView;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

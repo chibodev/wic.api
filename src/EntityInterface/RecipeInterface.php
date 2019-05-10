@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
-use App\Infrastructure\ValueObject\RecipeType;
+use App\Recipe\ValueObject\RecipeType;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 
