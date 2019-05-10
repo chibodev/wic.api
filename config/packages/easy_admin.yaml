@@ -8,6 +8,8 @@ easy_admin:
       js:
         - 'bundles/easyadmin/bootstrap-all.js'
   entities:
+    Administrator:
+      class: App\AMS\Entity\Administrator
     Recipe:
       class: App\Infrastructure\Entity\Recipe
       list:

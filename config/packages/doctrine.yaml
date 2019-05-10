@@ -44,3 +44,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Infrastructure/ValueObject'
                 prefix: 'App\Infrastructure\ValueObject\RecipeType'
                 alias: App\Infrastructure\ValueObject\RecipeType
+            App\AMS\Entity\Administrator:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/AMS/Entity'
+                prefix: 'App\AMS\Entity'
+                alias: App\AMS\Entity
