@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EntityInterface;
 
+use App\Infrastructure\ValueObject\RecipeType;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 
@@ -39,9 +40,9 @@ interface RecipeInterface
 
     public function setAuthor(string $source): void;
 
-    public function setType(string $type): void;
+    public function setType(RecipeType $type): void;
 
-    public function getType(): string;
+    public function getType(): RecipeType;
 
     public function setImageUrl(string $imageUrl): void;
 

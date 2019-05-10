@@ -86,7 +86,7 @@ class RecipeViewService implements RecipeView
             $recipeShort->setUuid($recipe->getUuid());
             $recipeShort->setPrep($recipe->getPrep());
             $recipeShort->setCook($recipe->getCook());
-            $recipeShort->setType($recipe->getType());
+            $recipeShort->setType($recipe->getType()->getValue());
             $recipeShort->setImageUrl($recipe->getImageUrl());
             $recipeShort->setKeto($recipe->isKeto());
             $recipeDto[] = $recipeShort;
@@ -97,6 +97,14 @@ class RecipeViewService implements RecipeView
 
     public function getRecipeByUuid(string $uuid)
     {
+        /**
+         * Todo: Change to events
+         * Events
+         * 1. Validate based on api key
+         * 2. Repo call to find by meal content and return
+         * 3. If not successful then save into unknown
+         */
+
         if (!$this->isUuidValid($uuid)){
             $this->logger->info(sprintf('invalid uuid entered: %s', $uuid));
             throw new RuntimeException(sprintf('invalid uuid entered: %s', $uuid));
@@ -119,7 +127,7 @@ class RecipeViewService implements RecipeView
         $this->recipeDto->setCook($recipe->getCook());
         $this->recipeDto->setIngredient($ingredient);
         $this->recipeDto->setDirection($direction);
-        $this->recipeDto->setType($recipe->getType());
+        $this->recipeDto->setType($recipe->getType()->getValue());
         $this->recipeDto->setImageUrl($recipe->getImageUrl());
         $this->recipeDto->setImageSource($recipe->getImageSource());
         $this->recipeDto->setAuthor($recipe->getAuthor());
@@ -131,9 +139,9 @@ class RecipeViewService implements RecipeView
     private function formatString(string $toBeFormatted): array
     {
         $toBeFormatted = strtolower(preg_replace('/[^A-Za-z]\s+/', ' ', $toBeFormatted));    //remove special char + multiple whitespaces
-        $toBeFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
+        $replacedFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
 
-        return str_word_count($toBeFormatted, 1);
+        return str_word_count($replacedFormatted, 1);
     }
 
     /**

@@ -88,8 +88,8 @@ class Recipe implements RecipeInterface
     private $author;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=50, nullable=false)
+     * @var RecipeType
+     * @ORM\Embedded(class="App\Infrastructure\ValueObject\RecipeType", columnPrefix=false)
      */
     private $type;
 
@@ -127,8 +127,7 @@ class Recipe implements RecipeInterface
         $uuid = Uuid::uuid4();
         $this->uuid = $uuid->toString();
         $this->createdAt = new DateTime();
-        $recipeType = new RecipeType(RecipeType::INCONCLUSIVE);
-        $this->type = $recipeType->getValue();
+        $this->type = new RecipeType(RecipeType::INCONCLUSIVE);
     }
 
     public function getId(): ?int
@@ -206,12 +205,12 @@ class Recipe implements RecipeInterface
         $this->author = $source;
     }
 
-    public function setType(?string $type): void
+    public function setType(?RecipeType $type): void
     {
         $this->type = $type;
     }
 
-    public function getType(): string
+    public function getType(): RecipeType
     {
         return $this->type;
     }

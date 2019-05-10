@@ -33,6 +33,19 @@ class RecipeController extends AbstractFOSRestController
     /**
      * @Route(path="/get/recipe/{uuid}", methods={"GET"})
      *
+     * @SWG\Parameter(
+     *     name="X-AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="The api key",
+     * )
+     * @SWG\Parameter(
+     *     name="uuid",
+     *     in="path",
+     *     type="string",
+     *     description="The recipe uuid",
+     *     default="f88808ca-310d-40d8-8042-2628af9fbf06"
+     * )
      * @SWG\Response(
      *     response=200,
      *     description="The endpoint for getting recipes off a specific search term",
@@ -49,12 +62,13 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=NotFound::class)
      *     )
      * )
-     * @SWG\Parameter(
-     *     name="uuid",
-     *     in="path",
-     *     type="string",
-     *     description="The recipe uuid",
-     *     default="f88808ca-310d-40d8-8042-2628af9fbf06"
+     * @SWG\Response(
+     *     response=401,
+     *     description="Authentication header required",
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="Access unauthorized",
      * )
      *
      * @throws Exception
@@ -70,21 +84,11 @@ class RecipeController extends AbstractFOSRestController
     /**
      * @Route(path="/get/recipe", methods={"POST"})
      *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Successful retrieval of recipes off a specific search term",
-     *     @SWG\Schema(
-     *         type="object",
-     *         ref=@Model(type=RecipeShort::class)
-     *     )
-     * )
-     * @SWG\Response(
-     *     response=404,
-     *     description="No recipe found for search term",
-     *     @SWG\Schema(
-     *         type="object",
-     *         ref=@Model(type=NotFound::class)
-     *     )
+     * @SWG\Parameter(
+     *     name="X-AUTH-TOKEN",
+     *     in="header",
+     *     type="string",
+     *     description="The api key",
      * )
      * @SWG\Parameter(
      *     name="body",
@@ -96,6 +100,31 @@ class RecipeController extends AbstractFOSRestController
      *         ref=@Model(type=MealContent::class)
      *     )
      * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Successful retrieval of recipes off a specific search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=RecipeShort::class)
+     *     )
+     * )
+     * @SWG\Response(
+     *     response=401,
+     *     description="Authentication header required",
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="Access unauthorized",
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="No recipe found for search term",
+     *     @SWG\Schema(
+     *         type="object",
+     *         ref=@Model(type=NotFound::class)
+     *     )
+     * )
+     *
      * @ParamConverter("content", converter="fos_rest.request_body")
      * @throws Exception
      */
@@ -107,5 +136,4 @@ class RecipeController extends AbstractFOSRestController
 
         return $this->handleView(View::create($recipe, $responseCode));
     }
-
 }
