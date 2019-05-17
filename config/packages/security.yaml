@@ -1,7 +1,6 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        #in_memory: { memory: ~ }
         fos_userbundle:
             id: fos_user.user_provider.username
 
@@ -12,15 +11,19 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
-            logout: true
-
+        api:
+            pattern: ^/api/
+            stateless: true
             guard:
                 authenticators:
                     - App\Common\Security\TokenAuthenticator
+        default:
+            anonymous: ~
+            logout: true
+            provider: fos_userbundle
+            guard:
+                authenticators:
                     - App\AMS\Security\AdminFormAuthenticator
-                entry_point: App\AMS\Security\AdminFormAuthenticator
 
             # activate different ways to authenticate
 

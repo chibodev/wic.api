@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Tests\Unit\Security\Service;
+namespace tests\Common\Tests\Unit\Security\Service;
 
 use App\Common\Security\Service\AccessKeyService;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 class AccessKeyServiceTest extends TestCase

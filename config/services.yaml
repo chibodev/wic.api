@@ -37,6 +37,17 @@ services:
         resource: '../src/Recipe/Controller'
         tags: ['controller.service_arguments']
 
+    App\Recipe\Formatter\RemovePredefinedWords:
+        tags:
+            - { name: format.search_criteria, priority: 48}
+
+    App\Recipe\Formatter\RemoveSpecialCharAndWhitespaces:
+        tags:
+            - { name: format.search_criteria, priority: 50}
+
+    App\Recipe\Service\SearchCriteriaFormatter:
+        arguments: [!tagged format.search_criteria]
+
     #========== AMS ==========#
     App\AMS\:
         resource: '../src/AMS/*'

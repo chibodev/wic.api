@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Recipe\Tests\Unit\Security;
+namespace tests\Recipe\Tests\Unit\Security;
 
 use App\Common\Security\Service\AccessKey;
 use App\Recipe\Entity\ApiUser;

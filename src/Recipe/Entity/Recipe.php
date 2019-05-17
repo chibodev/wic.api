@@ -2,9 +2,6 @@
 
 namespace App\Recipe\Entity;
 
-use App\EntityInterface\DirectionInterface;
-use App\EntityInterface\IngredientInterface;
-use App\EntityInterface\RecipeInterface;
 use App\Recipe\ValueObject\RecipeType;
 use DateTime;
 use DateTimeImmutable;
@@ -18,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Recipe\Repository\RecipeRepository")
  * @ORM\Table(indexes={@ORM\Index(name="name_idx", columns={"name"})})
  */
-class Recipe implements RecipeInterface
+class Recipe
 {
     /**
      * @var integer
@@ -70,14 +67,14 @@ class Recipe implements RecipeInterface
     private $createdAt;
 
     /**
-     * @var IngredientInterface|Collection
-     * @ORM\OneToMany(targetEntity="App\EntityInterface\IngredientInterface", mappedBy="recipe")
+     * @var Ingredient|Collection
+     * @ORM\OneToMany(targetEntity="App\Recipe\Entity\Ingredient", mappedBy="recipe")
      */
     private $ingredient;
 
     /**
-     * @var DirectionInterface|Collection
-     * @ORM\OneToMany(targetEntity="App\EntityInterface\DirectionInterface", mappedBy="recipe")
+     * @var Direction|Collection
+     * @ORM\OneToMany(targetEntity="App\Recipe\Entity\Direction", mappedBy="recipe")
      */
     private $direction;
 
@@ -150,7 +147,7 @@ class Recipe implements RecipeInterface
         return $this->uuid;
     }
 
-    public function setIngredient(?IngredientInterface $ingredient): void
+    public function setIngredient(?Ingredient $ingredient): void
     {
         $this->ingredient = $ingredient;
     }
@@ -190,7 +187,7 @@ class Recipe implements RecipeInterface
         return $this->direction;
     }
 
-    public function setDirection(?DirectionInterface $direction): void
+    public function setDirection(?Direction $direction): void
     {
         $this->direction = $direction;
     }
@@ -255,6 +252,9 @@ class Recipe implements RecipeInterface
         $this->approved = $approved;
     }
 
+    /*
+     * Explicitly for EasyAdmin
+     */
     public function __toString(): string
     {
         return sprintf('Recipe #%d: %s',$this->getId(), $this->getName());

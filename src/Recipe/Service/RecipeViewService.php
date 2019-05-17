@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Recipe\Service;
 
-use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
+use App\Recipe\Entity\Recipe as RecipeEntity;
+use App\Recipe\DTO\Response\Recipe;
 use App\Recipe\DTO\Response\RecipeShort;
 use App\Recipe\Entity\Unknown;
-use App\Recipe\PublicInterface\DirectionRepositoryInterface;
 use App\Recipe\PublicInterface\DTO\NotFoundInterface;
-use App\Recipe\PublicInterface\DTO\RecipeInterface;
-use App\Recipe\PublicInterface\IngredientRepositoryInterface;
-use App\Recipe\PublicInterface\RecipeRepositoryInterface;
 use App\Recipe\PublicInterface\RecipeView;
+use App\Recipe\Repository\DirectionRepository;
+use App\Recipe\Repository\IngredientRepository;
+use App\Recipe\Repository\RecipeRepository;
 use App\Recipe\Repository\UnknownRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -28,22 +28,18 @@ class RecipeViewService implements RecipeView
     private $directionRepo;
     private $logger;
 
-    private const AND = ' and ';
-    private const IS = ' is ';
-    private const EXCLUDE_CHAR = [
-        self::AND,
-        self::IS
-    ];
     private $notFound;
     private $recipeDto;
+    private $searchCriteriaFormatter;
 
     public function __construct(
-        RecipeRepositoryInterface $recipeRepo,
+        RecipeRepository $recipeRepo,
         UnknownRepository $unknownRepo,
-        IngredientRepositoryInterface $ingredientRepo,
-        DirectionRepositoryInterface $directionRepo,
+        IngredientRepository $ingredientRepo,
+        DirectionRepository $directionRepo,
         NotFoundInterface $notFound,
-        RecipeInterface $recipeDto,
+        Recipe $recipeDto,
+        SearchCriteriaFormat $searchCriteriaFormatter,
         LoggerInterface $logger
     ) {
         $this->recipeRepo = $recipeRepo;
@@ -53,11 +49,13 @@ class RecipeViewService implements RecipeView
         $this->logger = $logger;
         $this->notFound = $notFound;
         $this->recipeDto = $recipeDto;
+        $this->searchCriteriaFormatter = $searchCriteriaFormatter;
     }
 
     public function getRecipeByMealContent(string $mealContent)
     {
-        $recipes = $this->recipeRepo->findByMealContent($this->formatString($mealContent));
+        $searchCriteria = $this->getFormattedSearchCriteria($mealContent);
+        $recipes = $this->recipeRepo->findByMealContent($searchCriteria);
 
         if(!$recipes){
 
@@ -79,7 +77,7 @@ class RecipeViewService implements RecipeView
 
         $recipeDto = [];
 
-        /** @var RecipeEntityInterface $recipe */
+        /** @var RecipeEntity $recipe */
         foreach ($recipes as $recipe){
             $recipeShort = new RecipeShort();
             $recipeShort->setName($recipe->getName());
@@ -128,12 +126,9 @@ class RecipeViewService implements RecipeView
         return $this->recipeDto;
     }
 
-    private function formatString(string $toBeFormatted): array
+    private function getFormattedSearchCriteria(string $mealContent): array
     {
-        $toBeFormatted = strtolower(preg_replace('/[^A-Za-z]\s+/', ' ', $toBeFormatted));    //remove special char + multiple whitespaces
-        $replacedFormatted = str_replace(self::EXCLUDE_CHAR, ' ', $toBeFormatted); // remove certain phrase
-
-        return str_word_count($replacedFormatted, 1);
+        return str_word_count($this->searchCriteriaFormatter->apply($mealContent), 1);
     }
 
     /**

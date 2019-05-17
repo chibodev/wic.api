@@ -2,15 +2,13 @@
 
 namespace App\Recipe\Entity;
 
-use App\EntityInterface\IngredientInterface;
-use App\EntityInterface\RecipeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Recipe\Repository\IngredientRepository")
  * @ORM\Table(indexes={@ORM\Index(name="description_idx", columns={"description"})})
  */
-class Ingredient implements IngredientInterface
+class Ingredient
 {
     /**
      * @ORM\Id()
@@ -38,8 +36,8 @@ class Ingredient implements IngredientInterface
     private $unit;
 
     /**
-     * @var RecipeInterface
-     * @ORM\ManyToOne(targetEntity="App\EntityInterface\RecipeInterface", inversedBy="ingredient")
+     * @var Recipe
+     * @ORM\ManyToOne(targetEntity="App\Recipe\Entity\Recipe", inversedBy="ingredient")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
@@ -80,16 +78,19 @@ class Ingredient implements IngredientInterface
         $this->unit = $unit;
     }
 
-    public function setRecipe(RecipeInterface $recipe): void
+    public function setRecipe(Recipe $recipe): void
     {
         $this->recipe = $recipe;
     }
 
-    public function getRecipe(): ?RecipeInterface
+    public function getRecipe(): ?Recipe
     {
         return $this->recipe;
     }
 
+    /*
+     * Explicitly for EasyAdmin
+     */
     public function __toString() {
         return sprintf('Id #%d: %s %s%s',$this->getId(), $this->getDescription(), $this->getQuantity(), $this->unit);
     }
