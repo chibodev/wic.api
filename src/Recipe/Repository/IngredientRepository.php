@@ -6,19 +6,17 @@ namespace App\Recipe\Repository;
 
 use App\EntityInterface\RecipeInterface;
 use App\Recipe\Entity\Ingredient;
-use App\Recipe\PublicInterface\DTO\IngredientInterface;
-use App\Recipe\PublicInterface\IngredientRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method IngredientInterface|null find($id, $lockMode = null, $lockVersion = null)
- * @method IngredientInterface|null findOneBy(array $criteria, array $orderBy = null)
- * @method IngredientInterface[]    findAll()
- * @method IngredientInterface[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Ingredient|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Ingredient|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Ingredient[]    findAll()
+ * @method Ingredient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class IngredientRepository extends ServiceEntityRepository implements IngredientRepositoryInterface
+class IngredientRepository extends ServiceEntityRepository
 {
     /**
      * @throws LogicException

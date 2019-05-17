@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Recipe\DTO\Response;
 
-use App\Recipe\PublicInterface\DTO\DirectionInterface;
-
-class Direction implements DirectionInterface
+class Direction
 {
     /** @var string|null */
     private $description;

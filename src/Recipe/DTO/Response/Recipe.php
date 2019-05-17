@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Recipe\DTO\Response;
 
-use App\Recipe\PublicInterface\DTO\RecipeInterface;
-
-class Recipe implements RecipeInterface
+class Recipe
 {
     /** @var string */
     private $name;

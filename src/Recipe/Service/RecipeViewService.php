@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Recipe\Service;
 
 use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
+use App\Recipe\DTO\Response\Recipe;
 use App\Recipe\DTO\Response\RecipeShort;
 use App\Recipe\Entity\Unknown;
-use App\Recipe\PublicInterface\DirectionRepositoryInterface;
 use App\Recipe\PublicInterface\DTO\NotFoundInterface;
-use App\Recipe\PublicInterface\DTO\RecipeInterface;
-use App\Recipe\PublicInterface\IngredientRepositoryInterface;
-use App\Recipe\PublicInterface\RecipeRepositoryInterface;
 use App\Recipe\PublicInterface\RecipeView;
+use App\Recipe\Repository\DirectionRepository;
+use App\Recipe\Repository\IngredientRepository;
+use App\Recipe\Repository\RecipeRepository;
 use App\Recipe\Repository\UnknownRepository;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -38,12 +38,12 @@ class RecipeViewService implements RecipeView
     private $recipeDto;
 
     public function __construct(
-        RecipeRepositoryInterface $recipeRepo,
+        RecipeRepository $recipeRepo,
         UnknownRepository $unknownRepo,
-        IngredientRepositoryInterface $ingredientRepo,
-        DirectionRepositoryInterface $directionRepo,
+        IngredientRepository $ingredientRepo,
+        DirectionRepository $directionRepo,
         NotFoundInterface $notFound,
-        RecipeInterface $recipeDto,
+        Recipe $recipeDto,
         LoggerInterface $logger
     ) {
         $this->recipeRepo = $recipeRepo;

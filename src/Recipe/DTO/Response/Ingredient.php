@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Recipe\DTO\Response;
 
-use App\Recipe\PublicInterface\DTO\IngredientInterface;
-
-class Ingredient implements IngredientInterface
+class Ingredient
 {
     /** @var string|null */
     private $description;

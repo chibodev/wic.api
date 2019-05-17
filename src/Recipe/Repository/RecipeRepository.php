@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Recipe\Repository;
 
-use App\EntityInterface\RecipeInterface;
 use App\Recipe\Entity\Ingredient;
 use App\Recipe\Entity\Recipe;
-use App\Recipe\PublicInterface\RecipeRepositoryInterface;
 use App\Recipe\Service\LikeQueryHelpers;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -15,12 +13,12 @@ use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method RecipeInterface|null find($id, $lockMode = null, $lockVersion = null)
- * @method RecipeInterface|null findOneBy(array $criteria, array $orderBy = null)
- * @method RecipeInterface[]    findAll()
- * @method RecipeInterface[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Recipe|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Recipe|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Recipe[]    findAll()
+ * @method Recipe[]|null    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RecipeRepository extends ServiceEntityRepository implements RecipeRepositoryInterface
+class RecipeRepository extends ServiceEntityRepository
 {
     use LikeQueryHelpers;
 

@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Recipe\Tests\Unit\Service;
 
 use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
+use App\Recipe\DTO\Response\Direction;
+use App\Recipe\DTO\Response\Ingredient;
+use App\Recipe\DTO\Response\Recipe as RecipeDTO;
 use App\Recipe\DTO\Response\RecipeShort;
 use App\Recipe\Entity\Recipe;
 use App\Recipe\Entity\Unknown;
-use App\Recipe\PublicInterface\DirectionRepositoryInterface;
-use App\Recipe\PublicInterface\DTO\DirectionInterface;
-use App\Recipe\PublicInterface\DTO\IngredientInterface;
 use App\Recipe\PublicInterface\DTO\NotFoundInterface;
-use App\Recipe\PublicInterface\DTO\RecipeInterface;
 use App\Recipe\PublicInterface\RecipeView;
 use App\Recipe\Repository\DirectionRepository;
 use App\Recipe\Repository\IngredientRepository;
@@ -30,7 +29,7 @@ class RecipeViewServiceTest extends TestCase
 {
     /** @var NotFoundInterface|ObjectProphecy */
     private $notFound;
-    /** @var RecipeInterface|ObjectProphecy */
+    /** @var RecipeDTO|ObjectProphecy */
     private $recipeDto;
     /** @var RecipeRepository|ObjectProphecy */
     private $recipeRepo;
@@ -38,7 +37,7 @@ class RecipeViewServiceTest extends TestCase
     private $unknownRepo;
     /** @var IngredientRepository|ObjectProphecy */
     private $ingredientRepo;
-    /** @var DirectionRepositoryInterface|ObjectProphecy */
+    /** @var DirectionRepository|ObjectProphecy */
     private $directionRepo;
     /** @var LoggerInterface|ObjectProphecy */
     private $logger;
@@ -54,7 +53,7 @@ class RecipeViewServiceTest extends TestCase
         $this->directionRepo = $this->prophesize(DirectionRepository::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->notFound = $this->prophesize(NotFoundInterface::class);
-        $this->recipeDto = $this->prophesize(RecipeInterface::class);
+        $this->recipeDto = $this->prophesize(RecipeDTO::class);
 
         $this->subject = new RecipeViewService($this->recipeRepo->reveal(), $this->unknownRepo->reveal(), $this->ingredientRepo->reveal(),
             $this->directionRepo->reveal(), $this->notFound->reveal(), $this->recipeDto->reveal(),
@@ -162,8 +161,8 @@ class RecipeViewServiceTest extends TestCase
     {
         $type = new RecipeType(RecipeType::BEVERAGE);
         $uuid = 'fb09d733-be43-4ce3-a1df-e55796746738';
-        $direction = $this->prophesize(DirectionInterface::class);
-        $ingredient = $this->prophesize(IngredientInterface::class);
+        $direction = $this->prophesize(Direction::class);
+        $ingredient = $this->prophesize(Ingredient::class);
         $recipe = $this->prophesize(RecipeEntityInterface::class);
 
         $recipe->getName()->shouldBeCalled()->willReturn('recipe');
@@ -196,7 +195,7 @@ class RecipeViewServiceTest extends TestCase
         $this->recipeDto->getIngredient()->willReturn([$ingredient->reveal()]);
         $this->recipeDto->isKeto()->willReturn(false);
 
-        self::assertInstanceOf(RecipeInterface::class, $result);
+        self::assertInstanceOf(RecipeDTO::class, $result);
         self::assertSame('recipe', $result->getName());
         self::assertSame(10, $result->getPrep());
         self::assertSame(20, $result->getCook());
