@@ -33,7 +33,6 @@ class ApiKeyGeneratorCommand extends Command
      */
     protected function configure(): void
     {
-
         $this->setName('api:create:key')
             ->setDescription('Generates an api key.')
             ->addOption(
