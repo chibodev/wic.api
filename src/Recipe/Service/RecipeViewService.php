@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Recipe\Service;
 
-use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
+use App\Recipe\Entity\Recipe as RecipeEntity;
 use App\Recipe\DTO\Response\Recipe;
 use App\Recipe\DTO\Response\RecipeShort;
 use App\Recipe\Entity\Unknown;
@@ -79,7 +79,7 @@ class RecipeViewService implements RecipeView
 
         $recipeDto = [];
 
-        /** @var RecipeEntityInterface $recipe */
+        /** @var RecipeEntity $recipe */
         foreach ($recipes as $recipe){
             $recipeShort = new RecipeShort();
             $recipeShort->setName($recipe->getName());

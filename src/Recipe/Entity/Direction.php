@@ -2,14 +2,12 @@
 
 namespace App\Recipe\Entity;
 
-use App\EntityInterface\DirectionInterface;
-use App\EntityInterface\RecipeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Recipe\Repository\DirectionRepository")
  */
-class Direction implements DirectionInterface
+class Direction
 {
     /**
      * @ORM\Id()
@@ -25,8 +23,8 @@ class Direction implements DirectionInterface
     private $description;
 
     /**
-     * @var RecipeInterface
-     * @ORM\ManyToOne(targetEntity="App\EntityInterface\RecipeInterface", inversedBy="direction")
+     * @var Recipe
+     * @ORM\ManyToOne(targetEntity="App\Recipe\Entity\Recipe", inversedBy="direction")
      * @ORM\JoinColumn(name="recipe_id", referencedColumnName="id", nullable=false)
      */
     private $recipe;
@@ -47,16 +45,19 @@ class Direction implements DirectionInterface
         $this->description = $description;
     }
 
-    public function setRecipe(RecipeInterface $recipe): void
+    public function setRecipe(Recipe $recipe): void
     {
         $this->recipe = $recipe;
     }
 
-    public function getRecipe(): ?RecipeInterface
+    public function getRecipe(): ?Recipe
     {
         return $this->recipe;
     }
 
+    /*
+     * Explicitly for EasyAdmin
+     */
     public function __toString()
     {
         return sprintf('Id #%d: %s',$this->getId(), $this->getDescription());

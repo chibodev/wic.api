@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Recipe\Command;
 
 use App\Recipe\Event\ApiUserEvent;
-use App\Recipe\Security\ApiUser;
+use App\Recipe\PublicInterface\ApiUser;
 use App\Recipe\ValueObject\ApiUserRole;
 use Exception;
 use Ramsey\Uuid\Uuid;

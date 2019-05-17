@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Recipe\Security;
+namespace App\Recipe\PublicInterface;
 
 use App\Common\Security\DTO\AccessKey;
 use App\Recipe\Entity\ApiUser as ApiUserEntity;

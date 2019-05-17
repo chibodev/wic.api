@@ -6,7 +6,7 @@ namespace App\Recipe\Event\Subscriber;
 
 use App\Recipe\Entity\ApiUser as ApiUserEntity;
 use App\Recipe\Event\ApiUserEvent;
-use App\Recipe\Security\ApiUser;
+use App\Recipe\PublicInterface\ApiUser;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

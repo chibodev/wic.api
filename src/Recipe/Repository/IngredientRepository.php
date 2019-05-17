@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Recipe\Repository;
 
-use App\EntityInterface\RecipeInterface;
 use App\Recipe\Entity\Ingredient;
+use App\Recipe\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use LogicException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -26,7 +26,7 @@ class IngredientRepository extends ServiceEntityRepository
         parent::__construct($registry, Ingredient::class);
     }
 
-    public function findOneByRecipeForDto(RecipeInterface $recipe): ?array
+    public function findOneByRecipeForDto(Recipe $recipe): ?array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
 

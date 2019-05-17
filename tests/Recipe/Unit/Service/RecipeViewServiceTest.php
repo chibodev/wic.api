@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Recipe\Tests\Unit\Service;
+namespace tests\Recipe\Tests\Unit\Service;
 
-use App\EntityInterface\RecipeInterface as RecipeEntityInterface;
 use App\Recipe\DTO\Response\Direction;
 use App\Recipe\DTO\Response\Ingredient;
 use App\Recipe\DTO\Response\Recipe as RecipeDTO;
@@ -163,7 +162,7 @@ class RecipeViewServiceTest extends TestCase
         $uuid = 'fb09d733-be43-4ce3-a1df-e55796746738';
         $direction = $this->prophesize(Direction::class);
         $ingredient = $this->prophesize(Ingredient::class);
-        $recipe = $this->prophesize(RecipeEntityInterface::class);
+        $recipe = $this->prophesize(Recipe::class);
 
         $recipe->getName()->shouldBeCalled()->willReturn('recipe');
         $recipe->getPrep()->shouldBeCalled()->willReturn(10);

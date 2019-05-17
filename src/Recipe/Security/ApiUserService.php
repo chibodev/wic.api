@@ -7,6 +7,7 @@ namespace App\Recipe\Security;
 use App\Common\Security\DTO\AccessKey as AccessKeyDTO;
 use App\Common\Security\Service\AccessKey;
 use App\Recipe\Entity\ApiUser as ApiUserEntity;
+use App\Recipe\PublicInterface\ApiUser;
 use App\Recipe\Repository\ApiUserRepository;
 use Exception;
 use InvalidArgumentException;
