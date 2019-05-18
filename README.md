@@ -131,7 +131,7 @@ This can be done per terminal with the following command
 -  To create a new user
 
         fos:user:create
-- To assign the admin rights run the below command and when prompted to enter role enter ROLE_API_ADMIN
+- To assign the admin rights run the below command and when prompted to enter role enter `ROLE_API_ADMIN`
 
         fos:user:promote
 
