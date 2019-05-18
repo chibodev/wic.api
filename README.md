@@ -2,9 +2,9 @@
 WIC is a acronym for What I'll cook and this api serves to provide food recipe. Each request request a token as part of the header.
 There are currently 2 endpoints
 
-#### Endpoints
+### Endpoints
 - GET `/api/get/recipe/{uuid}` to retrieve recipe based on a known unique id
-  - ######Example cURL request
+  - ###### Example cURL request
             curl -X GET "http://127.0.0.1:8000/api/get/recipe/fb09d733-be43-4ce3-a1df-e55796746738" -H "accept: application/json" -H "X-AUTH-TOKEN: VALID_TOKEN"
         
   - ###### Example json response
