@@ -1,0 +1,73 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <br/>
+    <br/>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h3 class="">search & get inspiration!</h3>
+        </div>
+    </div>
+    <br/>
+    <div class="row justify-content-center">
+        <div class="col-8">
+             {{ form(searchForm) }}
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    {% if (data.status == 'yellow') %}
+        <div class="row justify-content-center">
+            <div class="col-13">
+                <small class="breadcrumb"> {{ data.message }} </small>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if (data.status == 'green') %}
+
+        {% set counter = 1 %}
+
+        <p class="font-weight-lighter">Available Recipe(s)</p>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Prep</th>
+                        <th scope="col">Cook</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Keto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for recipe in data.recipes %}
+                    <tr onclick="window.location='get/{{ recipe.uuid|e }}'">
+                        <th scope="row">{{ counter }}</th>
+                        <td>{{ recipe.name|e }}</td>
+                        <td>{{ recipe.prep|e }}</td>
+                        <td>{{ recipe.cook|e }}</td>
+                        <td>{{ recipe.type|capitalize|e }}</td>
+                        <td>{{ recipe.keto }}</td>
+                    </tr>
+                    {% set counter = counter + 1 %}
+                {% endfor %}
+                </tbody>
+                <tfoot class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Prep</th>
+                        <th scope="col">Cook</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Keto</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock body %}
+
