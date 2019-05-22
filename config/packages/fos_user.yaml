@@ -1,0 +1,18 @@
+fos_user:
+  db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+  firewall_name: main
+  user_class: App\AMS\Entity\Administrator
+
+  from_email:
+    address: '%env(MAILER_ADDRESS)%'
+    sender_name: '%env(MAILER_SENDER_NAME)%'
+
+  service:
+    mailer: fos_user.mailer.twig_swift
+
+  registration:
+    confirmation:
+      template:   '@FOSUser/Registration/email.txt.twig'
+      from_email:
+        address:        '%env(MAILER_REGISTRATION_ADDRESS)%'
+        sender_name:    '%env(MAILER_REGISTRATION_NAME)%'
