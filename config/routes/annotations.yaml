@@ -1,7 +1,0 @@
-ams:
-    resource: ../../src/AMS/Controller/
-    type: annotation
-
-recipe:
-    resource: ../../src/Recipe/Controller/
-    type: annotation
