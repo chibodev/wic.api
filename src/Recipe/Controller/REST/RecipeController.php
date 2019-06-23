@@ -31,7 +31,7 @@ class RecipeController extends AbstractFOSRestController
     }
 
     /**
-     * @Route(path="/get/recipe/{uuid}", methods={"GET"})
+     * @Route(path="/recipe/id/{uuid}", methods={"GET"})
      *
      * @SWG\Parameter(
      *     name="X-AUTH-TOKEN",
@@ -82,7 +82,7 @@ class RecipeController extends AbstractFOSRestController
     }
 
     /**
-     * @Route(path="/get/recipe", methods={"POST"})
+     * @Route(path="/recipe/search", methods={"POST"})
      *
      * @SWG\Parameter(
      *     name="X-AUTH-TOKEN",
