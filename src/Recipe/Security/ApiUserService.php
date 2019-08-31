@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Recipe\Security;
 
+use App\Common\Exception\TokenAuthenticationException;
 use App\Common\Security\DTO\AccessKey as AccessKeyDTO;
 use App\Common\Security\Service\AccessKey;
 use App\Recipe\Entity\ApiUser as ApiUserEntity;
 use App\Recipe\PublicInterface\ApiUser;
 use App\Recipe\Repository\ApiUserRepository;
-use InvalidArgumentException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Exception;
 use Symfony\Component\Security\Core\User\User;
 
 class ApiUserService implements ApiUser
@@ -38,7 +37,7 @@ class ApiUserService implements ApiUser
     public function verifyAccess(string $apiKey): User
     {
         if(!$this->isValid($apiKey)){
-            throw new InvalidArgumentException('Access forbidden! Error(s) while validating access key');
+            throw new TokenAuthenticationException('Access forbidden! Invalid access token');
         }
 
         [$uuid, $hash] = $this->getAccessVerificationCredentials($apiKey);
@@ -46,13 +45,13 @@ class ApiUserService implements ApiUser
         $apiUser = $this->repository->findOneBy(['uuid' => $uuid]);
 
         if (!$apiUser) {
-            throw new AuthenticationException('Access forbidden! Invalid user');
+            throw new TokenAuthenticationException('Access forbidden! Invalid user');
         }
 
         $authentication = hash_equals($hash, $apiUser->getHash()) && password_verify($apiUser->getUuid(), $hash);
 
         if (!$authentication) {
-            throw new UsernameNotFoundException('Access forbidden!. No user exists for the enter token');
+            throw new TokenAuthenticationException('Access forbidden!. No user associated with token');
         }
 
         return new User($apiUser->getUuid(), $apiUser->getHash(), $apiUser->getRoles());
