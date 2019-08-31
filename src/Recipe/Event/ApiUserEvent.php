@@ -6,7 +6,7 @@ namespace App\Recipe\Event;
 
 use App\Common\Security\DTO\AccessKey;
 use App\Recipe\ValueObject\ApiUserRole;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ApiUserEvent extends Event
 {

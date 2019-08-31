@@ -12,7 +12,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api:
-            pattern: ^/api/
+            pattern: ^/api/recipes
             stateless: true
             guard:
                 authenticators:
@@ -38,7 +38,7 @@ security:
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_API_ADMIN }
-        - { path: ^/api/get/, roles: ROLE_API_USER }
+        - { path: ^/api/recipes, roles: ROLE_API_USER }
 
     role_hierarchy:
         ROLE_API_ADMIN:       ROLE_API_USER

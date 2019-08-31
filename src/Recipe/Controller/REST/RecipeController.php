@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("api")
+ * @Route("api/v1")
  */
 class RecipeController extends AbstractFOSRestController
 {
@@ -31,7 +31,7 @@ class RecipeController extends AbstractFOSRestController
     }
 
     /**
-     * @Route(path="/get/recipe/{uuid}", methods={"GET"})
+     * @Route(path="/recipes/{uuid}", methods={"GET"})
      *
      * @SWG\Parameter(
      *     name="X-AUTH-TOKEN",
@@ -48,27 +48,28 @@ class RecipeController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="The endpoint for getting recipes off a specific search term",
+     *     description="The retrieval of a single recipe off a UUID was successful",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=Recipe::class)
      *     )
      * )
+     *
      * @SWG\Response(
-     *     response=400,
-     *     description="Invalid data supplied",
+     *     response=401,
+     *     description="The authentication header is missing",
+     * )
+     * @SWG\Response(
+     *     response=403,
+     *     description="Access is not authorized with requested token",
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="There is no recipe associated with provided UUID",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=NotFound::class)
      *     )
-     * )
-     * @SWG\Response(
-     *     response=401,
-     *     description="Authentication header required",
-     * )
-     * @SWG\Response(
-     *     response=403,
-     *     description="Access unauthorized",
      * )
      *
      * @throws Exception
@@ -76,13 +77,13 @@ class RecipeController extends AbstractFOSRestController
     public function getRecipeAction(string $uuid): Response
     {
         $recipe = $this->recipeView->getRecipeByUuid($uuid);
-        $responseCode = $recipe instanceof NotFound ? Response::HTTP_BAD_REQUEST : Response::HTTP_OK;
+        $responseCode = $recipe instanceof NotFound ? Response::HTTP_NOT_FOUND : Response::HTTP_OK;
 
         return $this->handleView(View::create($recipe, $responseCode));
     }
 
     /**
-     * @Route(path="/get/recipe", methods={"POST"})
+     * @Route(path="/recipes/search", methods={"POST"})
      *
      * @SWG\Parameter(
      *     name="X-AUTH-TOKEN",
@@ -102,7 +103,7 @@ class RecipeController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Successful retrieval of recipes off a specific search term",
+     *     description="The retrieval of recipes off a specific search term was successful",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=RecipeShort::class)
@@ -110,15 +111,15 @@ class RecipeController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=401,
-     *     description="Authentication header required",
+     *     description="The authentication header is missing",
      * )
      * @SWG\Response(
      *     response=403,
-     *     description="Access unauthorized",
+     *     description="Access is not authorized with requested token",
      * )
      * @SWG\Response(
      *     response=404,
-     *     description="No recipe found for search term",
+     *     description="No recipe found for search term at the moment",
      *     @SWG\Schema(
      *         type="object",
      *         ref=@Model(type=NotFound::class)

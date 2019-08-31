@@ -1,0 +1,282 @@
+openapi: 3.0.0
+info:
+  title: wic REST API
+  version: v1.0.0
+  description: WIC is a acronym for What I'll cook and this API serves the purpose of providing food recipes. Get loads of inspiration of what to cook just with an ingredient or a meal content of the dish. This is a generic API that allows WIC users to make any request searchable through API. With the help of GET call, it returns the list of recipes off tha provide UUID. With the help of POST call, recipe can be fetched based on the filters on the field names. Please note that POST call is used for the request to allow users to specify any complex search criteria without worry about the GET size limitations as well as encoding of the input parameters.
+
+servers:
+  - url: https://www.wic.com
+
+paths:
+  /api/v1/recipes/{uuid}:
+    get:
+      security:
+        - X-AUTH-TOKEN: []
+      summary: Retrieve a specific recipe
+      description: This endpoint enables the retrieval of a specific recipe based on its UUID.
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: A valid UUID that is associated with an existing recipe
+          schema:
+            type: string
+      responses:
+        200:
+          description: The retrieval of a single recipe off a UUID was successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+              examples:
+                request_api_get_recipe_by_uuid:
+                  $ref: "#/components/examples/request_api_get_recipe_by_uuid_example"
+        401:
+          description: The authentication header is missing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                request_api_get_recipe_by_uuid:
+                  $ref: "#/components/examples/request_missing_header_example"
+        403:
+          description: Access is not authorized with requested token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                request_api_get_recipe_by_uuid:
+                  $ref: "#/components/examples/request_access_unauthorized_example"
+        404:
+          description: There is no recipe associated with provided UUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+              examples:
+                request_api_get_recipe_by_uuid_not_found:
+                  $ref: "#/components/examples/request_api_get_recipe_by_uuid_not_found_example"
+  /api/v1/recipes/search:
+    post:
+      security:
+        - X-AUTH-TOKEN: []
+      summary: Request recipe
+      description: This endpoint allows for a valid user to request for recipe(s) based on search term. This can be an ingredient, a recipe name or even the content of desired dish.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MealContent"
+              type: json
+        description: The search term
+      responses:
+        200:
+          description: The retrieval of recipes off a specific search term was successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeShort"
+              examples:
+                request_api_recipe_by_recipe_term:
+                  $ref: "#/components/examples/request_api_recipe_by_recipe_term_example"
+        401:
+          description: The authentication header is missing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                request_api_get_recipe_by_uuid:
+                  $ref: "#/components/examples/request_missing_header_example"
+        403:
+          description: Access is not authorized with requested token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                request_api_get_recipe_by_uuid:
+                  $ref: "#/components/examples/request_access_unauthorized_example"
+        404:
+          description: No recipe found for search term at the moment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFound"
+              examples:
+                request_api_recipe_by_search_term_not_found:
+                  $ref: "#/components/examples/request_api_recipe_by_search_term_not_found_example"
+components:
+  schemas:
+    Recipe:
+      properties:
+        name:
+          type: string
+        prep:
+          type: integer
+        cook:
+          type: integer
+        ingredient:
+          items:
+            $ref: "#/components/schemas/Ingredient"
+          type: array
+        direction:
+          items:
+            $ref: "#/components/schemas/Direction"
+          type: array
+        author:
+          type: string
+        type:
+          type: string
+        imageUrl:
+          type: string
+        imageSource:
+          type: string
+        keto:
+          type: boolean
+      type: object
+    NotFound:
+      properties:
+        message:
+          type: string
+      type: object
+    MealContent:
+      required:
+        - mealContent
+      properties:
+        mealContent:
+          type: string
+      type: object
+    RecipeShort:
+      properties:
+        name:
+          type: string
+        prep:
+          type: integer
+        cook:
+          type: integer
+        uuid:
+          type: string
+        type:
+          type: string
+        imageUrl:
+          type: string
+        keto:
+          type: boolean
+      type: object
+    Ingredient:
+      properties:
+        description:
+          type: string
+        quantity:
+          type: number
+          format: float
+        unit:
+          type: string
+      type: object
+    Direction:
+      properties:
+        description:
+          type: string
+      type: object
+    Error:
+      properties:
+        message:
+          type: string
+
+  examples:
+    request_api_get_recipe_by_uuid_example:
+      value:
+        name: Rice and Beans with grilled chicken
+        prep: 10
+        cook: 240
+        ingredient:
+          - description: long grain parboiled rice
+            quantity: 500
+            unit: g
+          - description: 'brown/black-eyed beans '
+            quantity: 250
+            unit: g
+          - description: tomato stew
+            quantity: 500
+            unit: ml
+          - description: pepper and salt
+            quantity:
+            unit:
+          - description: medium onions
+            quantity: 2
+            unit:
+          - description: chicken
+            quantity:
+            unit:
+          - description: stock cubes
+            quantity: 2
+            unit:
+          - description: thyme
+            quantity: 1
+            unit: teaspoon
+        direction:
+          - description: Cook the beans till it is tender and set aside.
+          - description: Parboil the rice.
+          - description: Prepare the tomato stew
+          - description: Cook the chicken till tender with the chopped onions, thyme and stock
+              cubes.
+          - description: Pour the chicken/fish stock into a pot big enough to accommodate the
+              rice and beans, bearing in mind that the rice will rise some more.
+          - description: Add the tomato stew, the parboiled rice and the cooked beans. Check
+              that the water level is just less than the level of the rice and beans.
+          - description: Add pepper and salt to taste.
+          - description: Stir, cover the pot and cook at low to medium heat till the water is
+              dry.
+          - description: Put the chicken in a preheated oven at 200 degrees and allow to grill
+              for 30 minutes
+        author: eazy
+        type: FOOD
+        imageUrl: https://bit.ly/2Uj9zy4
+        imageSource:
+        keto: false
+
+    request_api_recipe_by_recipe_term_example:
+      value:
+        - name: Rice and Beans with grilled chicken
+          prep: 10
+          cook: 240
+          uuid: fb09d733-be43-4ce3-a1df-e55796746738
+          type: FOOD
+          imageUrl: https://bit.ly/2Uj9zy4
+          keto: false
+        - name: Rice and Beans with fried fish
+          prep: 10
+          cook: 240
+          uuid: fb09d733-be43-4ce3-a1df-e55796746748
+          type: FOOD
+          imageUrl: https://bit.ly/2TCS5bU
+          keto: false
+      summary: A example of a responsen for a search based on a valid uuid
+
+    request_missing_header_example:
+      value:
+        message: Authentication header required
+
+    request_access_unauthorized_example:
+      value:
+        message: Access forbidden!. No user associated with token
+
+    request_api_get_recipe_by_uuid_not_found_example:
+      value:
+        message: No recipe associated with the uuid
+
+    request_api_recipe_by_search_term_not_found_example:
+      value:
+        message: Unfortunately there is no available recipe/ingredient associated with the search term at this point in time.
+
+  securitySchemes:
+    X-AUTH-TOKEN:
+      description:
+        In oder to successfully use the API an access token, which is provided upon registration, is required. Without the access token, every request against the API will be rejected.
+        The access token which is attached to the http-Header is required for every request.<br /><br />
+      type: apiKey
+      name: X-AUTH-TOKEN
+      in: header
