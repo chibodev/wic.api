@@ -6,7 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "alterphp/easyadmin-extension-bundle": "^2.1",
-        "beberlei/DoctrineExtensions": "^1.2",
+        "beberlei/doctrineextensions": "^1.2",
         "doctrine/doctrine-bundle": "^1.10",
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "doctrine/orm": "^2.6",
@@ -29,6 +29,7 @@
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
+        "symfony/webpack-encore-bundle": "^1.6",
         "symfony/yaml": "4.2.*"
     },
     "config": {
@@ -79,6 +80,7 @@
     "require-dev": {
         "phpspec/prophecy": "^1.8",
         "phpunit/phpunit": "^7.5",
+        "roave/security-advisories": "dev-master",
         "symfony/maker-bundle": "^1.11",
         "symfony/profiler-pack": "^1.0",
         "symfony/test-pack": "^1.0",

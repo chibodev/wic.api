@@ -103,9 +103,6 @@
     "exsyst/swagger": {
         "version": "v0.4.1"
     },
-    "facebook/webdriver": {
-        "version": "1.6.0"
-    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -224,6 +221,9 @@
     "ramsey/uuid": {
         "version": "3.8.0"
     },
+    "roave/security-advisories": {
+        "version": "dev-master"
+    },
     "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
     },
@@ -296,9 +296,6 @@
             "bin/console",
             "config/bootstrap.php"
         ]
-    },
-    "symfony/contracts": {
-        "version": "v1.0.2"
     },
     "symfony/css-selector": {
         "version": "v4.2.4"
@@ -387,9 +384,6 @@
     },
     "symfony/options-resolver": {
         "version": "v4.2.4"
-    },
-    "symfony/panther": {
-        "version": "v0.3.0"
     },
     "symfony/phpunit-bridge": {
         "version": "4.1",
