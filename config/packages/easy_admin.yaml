@@ -13,13 +13,12 @@ easy_admin:
     Recipe:
       class: App\Recipe\Entity\Recipe
       list:
-        fields: ['id', 'uuid', 'name', 'type', 'author', 'prep', 'cook', { property: 'keto', type: 'toggle' },
+        fields: ['id', 'uuid', 'name', 'type', 'author', 'prep', 'cook',
                  { property: 'imageUrl', type: 'url' }, 'imageSource', { property: 'approved', type: 'toggle' }, { property: 'createdAt', format: 'Y-m-d' }]
       form:
         fields: ['name',
                  { property: 'type', type: 'choice', type_options: {choices: {'BEVERAGE':'BEVERAGE', 'FOOD':'FOOD', 'INCONCLUSIVE': 'INCONCLUSIVE'}}},
-                 'author', { property: 'keto', type: 'choice', type_options: {choices: {'Yes':true, 'No':false}}},
-                 'prep', 'cook', { property: 'imageUrl', type: 'url' }, 'imageSource']
+                 'author', 'prep', 'cook', { property: 'imageUrl', type: 'url' }, 'imageSource']
 
     Ingredient:
       class: App\Recipe\Entity\Ingredient

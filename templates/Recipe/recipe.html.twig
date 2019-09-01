@@ -17,7 +17,6 @@
                 <small>by: {{ data.recipe.author|capitalize|e }}</small>
                 <span class="breadcrumb"> Preparation: {{ data.recipe.prep|e }} min</span>
                 <span class="breadcrumb"> Cooking: {{ data.recipe.cook|e }} min</span>
-                <span class="breadcrumb"> Keto: {{ data.recipe.keto ? 'Yes' : 'No'}}</span>
             </div>
             {% if(data.recipe.imageUrl) %}
                 <div class="col-md-5">

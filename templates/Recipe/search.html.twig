@@ -39,7 +39,6 @@
                         <th scope="col">Prep</th>
                         <th scope="col">Cook</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Keto</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +49,6 @@
                         <td>{{ recipe.prep|e }}</td>
                         <td>{{ recipe.cook|e }}</td>
                         <td>{{ recipe.type|capitalize|e }}</td>
-                        <td>{{ recipe.keto }}</td>
                     </tr>
                     {% set counter = counter + 1 %}
                 {% endfor %}
@@ -62,7 +60,6 @@
                         <th scope="col">Prep</th>
                         <th scope="col">Cook</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Keto</th>
                     </tr>
                 </tfoot>
             </table>
