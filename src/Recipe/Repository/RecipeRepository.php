@@ -21,6 +21,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class RecipeRepository extends ServiceEntityRepository
 {
     use LikeQueryHelpers;
+    private const LIMITATION_FROM_UI = 1;
 
     /**
      * @throws LogicException
@@ -30,7 +31,7 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    public function findByMealContent(array $mealContents): ?array
+    public function findByMealContent(array $mealContents, bool $limitation = false): ?array
     {
         $queryBuilder = $this->_em->createQueryBuilder();
 
@@ -45,6 +46,10 @@ class RecipeRepository extends ServiceEntityRepository
             $queryBuilder->orWhere("recipe.name LIKE :mealContent$index");
             $queryBuilder->orWhere("ingredient.description LIKE :mealContent$index");
             $queryBuilder->setParameter("mealContent$index", $this->makeLikeParam($mealContent));
+        }
+
+        if ($limitation){
+            $queryBuilder->setMaxResults(self::LIMITATION_FROM_UI);
         }
 
         return $queryBuilder->getQuery()->getResult();

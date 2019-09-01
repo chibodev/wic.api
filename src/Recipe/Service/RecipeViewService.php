@@ -52,10 +52,10 @@ class RecipeViewService implements RecipeView
         $this->searchCriteriaFormatter = $searchCriteriaFormatter;
     }
 
-    public function getRecipeByMealContent(string $mealContent)
+    public function getRecipeByMealContent(string $mealContent, bool $limitation = false)
     {
         $searchCriteria = $this->getFormattedSearchCriteria($mealContent);
-        $recipes = $this->recipeRepo->findByMealContent($searchCriteria);
+        $recipes = !empty($searchCriteria) ? $this->recipeRepo->findByMealContent($searchCriteria, $limitation) : null;
 
         if(!$recipes){
 
@@ -86,7 +86,6 @@ class RecipeViewService implements RecipeView
             $recipeShort->setCook($recipe->getCook());
             $recipeShort->setType($recipe->getType()->getValue());
             $recipeShort->setImageUrl($recipe->getImageUrl());
-            $recipeShort->setKeto($recipe->isKeto());
             $recipeDto[] = $recipeShort;
         }
 
@@ -121,7 +120,6 @@ class RecipeViewService implements RecipeView
         $this->recipeDto->setImageUrl($recipe->getImageUrl());
         $this->recipeDto->setImageSource($recipe->getImageSource());
         $this->recipeDto->setAuthor($recipe->getAuthor());
-        $this->recipeDto->setKeto($recipe->isKeto());
 
         return $this->recipeDto;
     }

@@ -15,7 +15,7 @@ interface RecipeView
      * @return RecipeShort|NotFoundInterface
      * @throws Exception
      */
-    public function getRecipeByMealContent(string $mealContent);
+    public function getRecipeByMealContent(string $mealContent, bool $limitation);
 
     /**
      * @return Recipe|NotFoundInterface

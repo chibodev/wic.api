@@ -41,7 +41,7 @@ class RecipeController extends AbstractController
             /** @var MealContentRequestDTO $mealContent */
             $mealContent = $form->getData();
 
-            $recipe = $this->recipeService->getRecipeByMealContent($mealContent->getMealContent());
+            $recipe = $this->recipeService->getRecipeByMealContent($mealContent->getMealContent(), true);
 
             if ($recipe instanceof NotFoundResponseDTO){
                 $params['status'] = 'yellow';
