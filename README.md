@@ -77,7 +77,6 @@ There are currently 2 endpoints
               "type": "FOOD",
               "imageUrl": "https://bit.ly/2Uj9zy4",
               "imageSource": null,
-              "keto": false
             }
         
 
@@ -101,7 +100,6 @@ to retrieve recipe based on recipe name or ingredient which is enter as the body
                 "uuid": "fb09d733-be43-4ce3-a1df-e55796746738",
                 "type": "FOOD",
                 "imageUrl": "https://bit.ly/2Uj9zy4",
-                "keto": false
               },
 
 To get started, you need to follow a few steps:
