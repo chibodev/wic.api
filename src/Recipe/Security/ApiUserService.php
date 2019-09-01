@@ -51,7 +51,7 @@ class ApiUserService implements ApiUser
         $authentication = hash_equals($hash, $apiUser->getHash()) && password_verify($apiUser->getUuid(), $hash);
 
         if (!$authentication) {
-            throw new TokenAuthenticationException('Access forbidden!. No user associated with token');
+            throw new TokenAuthenticationException('Access forbidden! No user associated with token');
         }
 
         return new User($apiUser->getUuid(), $apiUser->getHash(), $apiUser->getRoles());
