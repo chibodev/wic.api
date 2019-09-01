@@ -12,8 +12,6 @@ class RecipeShort
     private $prep;
     /** @var int|null */
     private $cook;
-    /** @var bool */
-    private $keto;
     /** @var string */
     private $uuid;
     /** @var string */
@@ -79,15 +77,5 @@ class RecipeShort
     public function setImageUrl(?string $imageUrl): void
     {
         $this->imageUrl = $imageUrl;
-    }
-
-    public function isKeto(): bool
-    {
-        return $this->keto;
-    }
-
-    public function setKeto(bool $keto): void
-    {
-        $this->keto = $keto;
     }
 }
