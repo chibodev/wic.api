@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace tests\Recipe\Tests\Unit\Security;
 
+use App\Common\Exception\TokenAuthenticationException;
+use App\Common\Security\DTO\AccessKey as AccessKeyDTO;
 use App\Common\Security\Service\AccessKey;
 use App\Recipe\Entity\ApiUser;
 use App\Recipe\Repository\ApiUserRepository;
 use App\Recipe\Security\ApiUserService;
-use App\Common\Security\DTO\AccessKey as AccessKeyDTO;
-use Exception;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class ApiUserServiceTest extends TestCase
 {
@@ -60,7 +58,8 @@ class ApiUserServiceTest extends TestCase
 
     public function testVerifyAccessWithInvalidApiKey(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TokenAuthenticationException::class);
+        $this->expectExceptionMessage('Access forbidden! Invalid access token');
 
         $this->repository->findOneBy(['uuid' => 'error'])->shouldNotBeCalled();
         $this->subject->verifyAccess('');
@@ -72,7 +71,8 @@ class ApiUserServiceTest extends TestCase
 
         $this->repository->findOneBy(Argument::any())->shouldBeCalled()->willReturn(null);
 
-        $this->expectException(Exception::class);
+        $this->expectException(TokenAuthenticationException::class);
+        $this->expectExceptionMessage('Access forbidden! Invalid user');
 
         $this->subject->verifyAccess($apiKey);
 
@@ -89,7 +89,8 @@ class ApiUserServiceTest extends TestCase
 
         $this->repository->findOneBy(Argument::any())->shouldBeCalled()->willReturn($apiUser->reveal());
 
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(TokenAuthenticationException::class);
+        $this->expectExceptionMessage('Access forbidden! No user associated with token');
 
         $this->subject->verifyAccess($apiKey);
     }

@@ -17,6 +17,7 @@ use App\Recipe\Repository\IngredientRepository;
 use App\Recipe\Repository\RecipeRepository;
 use App\Recipe\Repository\UnknownRepository;
 use App\Recipe\Service\RecipeViewService;
+use App\Recipe\Service\SearchCriteriaFormat;
 use App\Recipe\ValueObject\RecipeType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -26,6 +27,8 @@ use RuntimeException;
 
 class RecipeViewServiceTest extends TestCase
 {
+    /** @var SearchCriteriaFormat|ObjectProphecy */
+    private $searchCriteriaFormatter;
     /** @var NotFoundInterface|ObjectProphecy */
     private $notFound;
     /** @var RecipeDTO|ObjectProphecy */
@@ -53,17 +56,27 @@ class RecipeViewServiceTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->notFound = $this->prophesize(NotFoundInterface::class);
         $this->recipeDto = $this->prophesize(RecipeDTO::class);
+        $this->searchCriteriaFormatter = $this->prophesize(SearchCriteriaFormat::class);
 
-        $this->subject = new RecipeViewService($this->recipeRepo->reveal(), $this->unknownRepo->reveal(), $this->ingredientRepo->reveal(),
-            $this->directionRepo->reveal(), $this->notFound->reveal(), $this->recipeDto->reveal(),
-            $this->logger->reveal());
+        $this->subject = new RecipeViewService(
+            $this->recipeRepo->reveal(),
+            $this->unknownRepo->reveal(),
+            $this->ingredientRepo->reveal(),
+            $this->directionRepo->reveal(),
+            $this->notFound->reveal(),
+            $this->recipeDto->reveal(),
+            $this->searchCriteriaFormatter->reveal(),
+            $this->logger->reveal()
+        );
     }
 
     public function testMealContentUnknownAndNew(): void
     {
         $mealContent = 'content';
 
-        $this->recipeRepo->findByMealContent([$mealContent])->shouldBeCalled()->willReturn(null);
+        $this->searchCriteriaFormatter->apply($mealContent)->shouldBeCalled()->willReturn($mealContent);
+
+        $this->recipeRepo->findByMealContent([$mealContent], false)->shouldBeCalled()->willReturn(null);
 
         $this->unknownRepo->findOneBy(['term' => $mealContent])->shouldBeCalled()->willReturn(null);
         $this->unknownRepo->save(Argument::type(Unknown::class))->shouldBeCalled();
@@ -78,7 +91,9 @@ class RecipeViewServiceTest extends TestCase
         $mealContent = 'content';
         $unknown = $this->prophesize(Unknown::class);
 
-        $this->recipeRepo->findByMealContent([$mealContent])->shouldBeCalled()->willReturn(null);
+        $this->searchCriteriaFormatter->apply($mealContent)->shouldBeCalled()->willReturn($mealContent);
+
+        $this->recipeRepo->findByMealContent([$mealContent], false)->shouldBeCalled()->willReturn(null);
 
         $this->unknownRepo->findOneBy(['term' => $mealContent])->shouldBeCalled()->willReturn($unknown->reveal());
         $unknown->updateCounter()->shouldBeCalled();
@@ -104,9 +119,10 @@ class RecipeViewServiceTest extends TestCase
         $recipe->getCook()->shouldBeCalled()->willReturn(20);
         $recipe->getType()->shouldBeCalled()->willReturn($type);
         $recipe->getImageUrl()->shouldBeCalled()->willReturn('url');
-        $recipe->isKeto()->shouldBeCalled()->willReturn(true);
 
-        $this->recipeRepo->findByMealContent([$mealContent])->shouldBeCalled()->willReturn([$recipe->reveal()]);
+        $this->searchCriteriaFormatter->apply($mealContent)->shouldBeCalled()->willReturn($mealContent);
+
+        $this->recipeRepo->findByMealContent([$mealContent], false)->shouldBeCalled()->willReturn([$recipe->reveal()]);
 
         $this->unknownRepo->findOneBy(['term' => $mealContent])->shouldNotBeCalled();
         $this->unknownRepo->save(Argument::type(Unknown::class))->shouldNotBeCalled();
@@ -119,7 +135,6 @@ class RecipeViewServiceTest extends TestCase
         $recipeShort->getCook()->willReturn(20);
         $recipeShort->getType()->willReturn($type);
         $recipeShort->getImageUrl()->willReturn('url');
-        $recipeShort->isKeto()->willReturn(true);
 
         self::assertIsArray($result);
         self::assertSame('uuid', $result[0]->getUuid());
@@ -128,7 +143,6 @@ class RecipeViewServiceTest extends TestCase
         self::assertSame(20, $result[0]->getCook());
         self::assertSame(RecipeType::FOOD, $result[0]->getType());
         self::assertSame('url', $result[0]->getImageUrl());
-        self::assertTrue($result[0]->isKeto());
     }
 
 
@@ -171,7 +185,6 @@ class RecipeViewServiceTest extends TestCase
         $recipe->getImageUrl()->shouldBeCalled()->willReturn('url');
         $recipe->getImageSource()->shouldBeCalled()->willReturn('urlSource');
         $recipe->getAuthor()->shouldBeCalled()->willReturn('me');
-        $recipe->isKeto()->shouldBeCalled()->willReturn(false);
 
         $direction->getDescription()->willReturn('description');
         $ingredient->getDescription()->willReturn('description');
@@ -192,7 +205,6 @@ class RecipeViewServiceTest extends TestCase
         $this->recipeDto->getAuthor()->willReturn('me');
         $this->recipeDto->getDirection()->willReturn([$direction->reveal()]);
         $this->recipeDto->getIngredient()->willReturn([$ingredient->reveal()]);
-        $this->recipeDto->isKeto()->willReturn(false);
 
         self::assertInstanceOf(RecipeDTO::class, $result);
         self::assertSame('recipe', $result->getName());
@@ -204,6 +216,5 @@ class RecipeViewServiceTest extends TestCase
         self::assertSame('me', $result->getAuthor());
         self::assertSame('description', $result->getDirection()[0]->getDescription());
         self::assertSame('description', $result->getIngredient()[0]->getDescription());
-        self::assertFalse($result->isKeto());
     }
 }
