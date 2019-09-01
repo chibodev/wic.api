@@ -11,7 +11,7 @@ paths:
   /api/v1/recipes/{uuid}:
     get:
       security:
-        - X-AUTH-TOKEN: []
+        - ApiKeyAuth: []
       summary: Retrieve a specific recipe
       description: This endpoint enables the retrieval of a specific recipe based on its UUID.
       parameters:
@@ -22,7 +22,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: The retrieval of a single recipe off a UUID was successful
           content:
             application/json:
@@ -31,7 +31,7 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid:
                   $ref: "#/components/examples/request_api_get_recipe_by_uuid_example"
-        401:
+        "401":
           description: The authentication header is missing
           content:
             application/json:
@@ -40,7 +40,7 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid:
                   $ref: "#/components/examples/request_missing_header_example"
-        403:
+        "403":
           description: Access is not authorized with requested token
           content:
             application/json:
@@ -49,7 +49,7 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid:
                   $ref: "#/components/examples/request_access_unauthorized_example"
-        404:
+        "404":
           description: There is no recipe associated with provided UUID
           content:
             application/json:
@@ -58,10 +58,11 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid_not_found:
                   $ref: "#/components/examples/request_api_get_recipe_by_uuid_not_found_example"
+
   /api/v1/recipes/search:
     post:
       security:
-        - X-AUTH-TOKEN: []
+        - ApiKeyAuth: []
       summary: Request recipe
       description: This endpoint allows for a valid user to request for recipe(s) based on search term. This can be an ingredient, a recipe name or even the content of desired dish.
       requestBody:
@@ -72,7 +73,7 @@ paths:
               type: json
         description: The search term
       responses:
-        200:
+        "200":
           description: The retrieval of recipes off a specific search term was successful
           content:
             application/json:
@@ -81,7 +82,7 @@ paths:
               examples:
                 request_api_recipe_by_recipe_term:
                   $ref: "#/components/examples/request_api_recipe_by_recipe_term_example"
-        401:
+        "401":
           description: The authentication header is missing
           content:
             application/json:
@@ -90,7 +91,7 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid:
                   $ref: "#/components/examples/request_missing_header_example"
-        403:
+        "403":
           description: Access is not authorized with requested token
           content:
             application/json:
@@ -99,7 +100,7 @@ paths:
               examples:
                 request_api_get_recipe_by_uuid:
                   $ref: "#/components/examples/request_access_unauthorized_example"
-        404:
+        "404":
           description: No recipe found for search term at the moment
           content:
             application/json:
@@ -134,8 +135,6 @@ components:
           type: string
         imageSource:
           type: string
-        keto:
-          type: boolean
       type: object
     NotFound:
       properties:
@@ -163,8 +162,6 @@ components:
           type: string
         imageUrl:
           type: string
-        keto:
-          type: boolean
       type: object
     Ingredient:
       properties:
@@ -236,7 +233,6 @@ components:
         type: FOOD
         imageUrl: https://bit.ly/2Uj9zy4
         imageSource:
-        keto: false
 
     request_api_recipe_by_recipe_term_example:
       value:
@@ -246,14 +242,12 @@ components:
           uuid: fb09d733-be43-4ce3-a1df-e55796746738
           type: FOOD
           imageUrl: https://bit.ly/2Uj9zy4
-          keto: false
         - name: Rice and Beans with fried fish
           prep: 10
           cook: 240
           uuid: fb09d733-be43-4ce3-a1df-e55796746748
           type: FOOD
           imageUrl: https://bit.ly/2TCS5bU
-          keto: false
       summary: A example of a responsen for a search based on a valid uuid
 
     request_missing_header_example:
@@ -273,7 +267,7 @@ components:
         message: Unfortunately there is no available recipe/ingredient associated with the search term at this point in time.
 
   securitySchemes:
-    X-AUTH-TOKEN:
+    ApiKeyAuth:
       description:
         In oder to successfully use the API an access token, which is provided upon registration, is required. Without the access token, every request against the API will be rejected.
         The access token which is attached to the http-Header is required for every request.<br /><br />

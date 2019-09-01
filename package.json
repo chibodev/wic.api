@@ -1,8 +1,11 @@
 {
     "devDependencies": {
+        "concurrently": "^4.1.2",
         "core-js": "^3.0.0",
+        "live-server": "^1.2.1",
         "redoc-cli": "^0.8.6",
-        "regenerator-runtime": "^0.13.2"
+        "regenerator-runtime": "^0.13.2",
+        "watch": "^1.0.2"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -10,6 +13,10 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "redoc-bundle": "./node_modules/.bin/redoc-cli bundle ./config/swagger.yaml --output ./templates/docs/api.html",
+        "redoc-reload": "live-server —-watch=templates/docs/ --open=templates/docs/",
+        "redoc-watch": "watch \"npm run redoc-blundle\" ./config",
+        "api-doc": "concurrently \"npm run redoc-reload\" \"npm run redoc-watch\""
     }
 }
